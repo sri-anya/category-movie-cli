@@ -1,4 +1,5 @@
 # lib/cli.py
+from pyfiglet import Figlet
 
 from helpers import (
     exit_program,
@@ -19,6 +20,10 @@ def main():
 
 
 def menu():
+    
+    f = Figlet(font='starwars')
+    print("\n")
+    print(f.renderText(('MOVIE MATRIX').center(20," ")))
     print("Please select an option:")
     print("0. Exit the program")
     print("1. Some useful function")
