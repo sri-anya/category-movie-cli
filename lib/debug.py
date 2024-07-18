@@ -3,14 +3,15 @@
 
 from models.__init__ import CONN, CURSOR
 import ipdb
-from models.category import Category
+from lib.models.genre import Genre
+from lib.models.movie import Movie
 
-# def reset_database():
-#     Category.drop_table()
-#     # Department.drop_table()
-#     Category.create_table()
-#     # Employee.create_table()
+def reset_database():
+    Genre.drop_table()
+    Movie.drop_table()
+    Genre.create_table()
+    Movie.create_table()
 
 
-# reset_database()
+reset_database()
 ipdb.set_trace()
