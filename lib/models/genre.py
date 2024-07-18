@@ -7,7 +7,7 @@ class Genre:
     # Dictionary of objects saved to the database.
     all = {}
 
-    def __init__( self, name, description, created_at= datetime.now().strftime('%Y-%m-%d %H:%M:%S'), id = None):
+    def __init__( self, name, description, created_at, id = None):
         self.id = id
         self.name = name
         self.description = description
@@ -42,7 +42,7 @@ class Genre:
     def drop_table(cls):
         """ Create a new table to persist the attributes of Genre instances """
         sql = """
-            CREATE TABLE IF EXISTS genres;
+            DROP TABLE IF EXISTS genres;
         """
 
         CURSOR.execute(sql)
@@ -53,7 +53,7 @@ class Genre:
         Update object id attribute using the primary key value of new row.
         Save the object in local dictionary using table row's PK as dictionary key"""
         sql = """
-            INSERT INTO departments (name, description, created_at)
+            INSERT INTO genres (name, description, created_at)
             VALUES (?, ?, ?)
         """
 
@@ -64,9 +64,40 @@ class Genre:
         type(self).all[self.id] = self
 
     @classmethod
-    def create(cls, name, description, created_at):
-        """ Initialize a new Department instance and save the object to the database """
+    def create(cls, name, description, created_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S')):
+        """ Initialize a new Genre instance and save the object to the database """
         genre = cls(name, description, created_at)
         genre.save()
         return genre
+    
+
+    @classmethod
+    def instance_from_db(cls, row):
+        """Return a Genre object having the attribute values from the table row."""
+
+        # Check the dictionary for an existing instance using the row's primary key
+        genre = cls.all.get(row[0])
+        if genre:
+            # ensure attributes match row values in case local instance was modified
+            genre.name = row[1]
+            genre.description = row[2]
+            genre.created_at = row[3]
+        else:
+            # not in dictionary, create new instance and add to dictionary
+            genre = cls(row[1], row[2], row[3])
+            genre.id = row[0]
+            cls.all[genre.id] = genre
+        return genre
+
+    @classmethod
+    def get_all(cls):
+        """Return a list containing a Genre object per row in the table"""
+        sql = """
+            SELECT *
+            FROM genres
+        """
+
+        rows = CURSOR.execute(sql).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
     

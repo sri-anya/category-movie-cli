@@ -1,8 +1,12 @@
 # lib/models/movie.py
 from models.__init__ import CURSOR, CONN
+from models.genre import Genre
 
 class Movie:
-    def __init__(self, id, name, release_year, description, genre_id):
+
+    all = {}
+    
+    def __init__(self, name, release_year, description, genre_id, id = None):
         self.id = id
         self.name = name
         self.release_year = release_year
@@ -14,7 +18,7 @@ class Movie:
             {'-'*40}
             # Movie Details
             # Name: {self.name}
-            # Genre: {self.genre_id}
+            # Genre: {Genre.all[self.genre_id].name}
             # Release Year: {self.release_year}
             {'-'*40}
             """
@@ -26,11 +30,11 @@ class Movie:
         sql = """
             CREATE TABLE IF NOT EXISTS movies (
             id INTEGER PRIMARY KEY,
-            name TEXT NOT NULL,
+            name TEXT,
             description TEXT,
-            release_year INTEGER NOT NULL,
-            genre_id INTEGER NOT NULL,
-            FOREIGN KEY (genre_id) REFERENCES genres(id)
+            release_year INTEGER,
+            genre_id INTEGER,
+            FOREIGN KEY (genre_id) REFERENCES genres(id))
         """
 
         CURSOR.execute(sql)
@@ -51,7 +55,7 @@ class Movie:
         Update object id attribute using the primary key value of new row.
         Save the object in local dictionary using table row's PK as dictionary key"""
         sql = """
-                INSERT INTO employees (name, release_year, description, genre_id)
+                INSERT INTO movies (name, release_year, description, genre_id)
                 VALUES (?, ?, ?, ?)
         """
 
@@ -60,3 +64,41 @@ class Movie:
 
         self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
+
+    @classmethod
+    def create(cls, name, release_year, description, genre_id):
+        """ Initialize a new Movie instance and save the object to the database """
+        movie = cls(name, release_year, description, genre_id)
+        movie.save()
+        return movie
+    
+    @classmethod
+    def instance_from_db(cls, row):
+        """Return an Movie object having the attribute values from the table row."""
+
+        # Check the dictionary for  existing instance using the row's primary key
+        movie = cls.all.get(row[0])
+        if movie:
+            # ensure attributes match row values in case local instance was modified
+            movie.name = row[1]
+            movie.description = row[2]
+            movie.release_year = row[3]
+            movie.genre_id = row[4]
+        else:
+            # not in dictionary, create new instance and add to dictionary
+            movie = cls(row[1], row[2], row[3], row[4])
+            movie.id = row[0]
+            cls.all[movie.id] = movie
+        return movie
+    
+    @classmethod
+    def get_all(cls):
+        """Return a list containing one Movie object per table row"""
+        sql = """
+            SELECT *
+            FROM movies
+        """
+
+        rows = CURSOR.execute(sql).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]

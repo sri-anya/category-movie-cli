@@ -23,7 +23,7 @@ def menu():
     
     f = Figlet(font='starwars')
     print("\n")
-    print(f.renderText(('MOVIE MATRIX').center(20," ")))
+    print(f.renderText(('FilmFinder').center(20," ")))
     print("Please select an option:")
     print("0. Exit the program")
     print("1. Some useful function")
