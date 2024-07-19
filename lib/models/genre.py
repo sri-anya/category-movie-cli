@@ -64,7 +64,7 @@ class Genre:
         type(self).all[self.id] = self
 
     @classmethod
-    def create(cls, name, description, created_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S')):
+    def create(cls, name, description, created_at=datetime.now().strftime('%Y-%m-%d')):
         """ Initialize a new Genre instance and save the object to the database """
         genre = cls(name, description, created_at)
         genre.save()

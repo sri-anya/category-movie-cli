@@ -3,30 +3,66 @@ from pyfiglet import Figlet
 
 from helpers import (
     exit_program,
-    helper_1
+    display_all_genres, 
+    helper_2
 )
 
 
 def main():
+    f = Figlet(font='starwars')
+    print(f.renderText(('MovieDB').center(10," ")))
     while True:
         menu()
         choice = input("> ")
         if choice == "0":
             exit_program()
         elif choice == "1":
-            helper_1()
+            s = f"""
+                {'-'*40}
+                # Genre
+                {'-'*40}
+                """
+            print(s)
+            while True:
+                show_genre_menu()
+                choice = input("> ")
+                if choice == "0":
+                    break
+                elif choice == "1":
+                    display_all_genres()
+                    
+        elif choice == "2":
+            s = f"""
+                {'-'*40}
+                # Movie
+                {'-'*40}
+                """
+            print(s)
+            show_movie_menu()
         else:
             print("Invalid choice")
 
 
 def menu():
     
-    f = Figlet(font='starwars')
-    print("\n")
-    print(f.renderText(('FilmFinder').center(20," ")))
     print("Please select an option:")
     print("0. Exit the program")
-    print("1. Some useful function")
+    print("1. Search movies based on Genre")
+    print("2. Search movies based on movie name")
+
+def show_genre_menu():
+    print("0. To return to main menu")
+    print("1. To search using genres")
+    
+
+
+
+def show_movie_menu():
+    #option1: type movie name
+    # type letter that movie starts with
+    pass
+
+
 
 
 if __name__ == "__main__":
