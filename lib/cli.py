@@ -1,10 +1,12 @@
 # lib/cli.py
 from pyfiglet import Figlet
+from models.genre import Genre
 
 from helpers import (
     exit_program,
     display_all_genres, 
-    find_all_by_movie_name
+    find_all_by_movie_name,
+    add_new_movie
 )
 
 
@@ -30,6 +32,10 @@ def main():
                     break
                 elif choice == "1":
                     display_all_genres()
+                    genre_id_selected = int(input("Select the genre (Enter 1, 2, 3...): "))
+                    genre_selected = Genre.find_by_id(genre_id_selected-1)
+                    print(genre_selected.movies)
+
                     
         elif choice == "2":
             s = f"""
@@ -46,6 +52,13 @@ def main():
                 elif choice == "1":
                     movie = input("Enter movie name: ")
                     find_all_by_movie_name(movie)
+                elif choice == "2":
+                    input("Enter a letter from A-Z")
+                elif choice == "3":
+                    add_new_movie()
+                else:
+                    print("Invalid choice! returning to main menu.")
+                    break
             
         else:
             print("Invalid choice")
@@ -60,11 +73,13 @@ def menu():
 def show_genre_menu():
     print("0. To return to main menu")
     print("1. To search using genres")
+    # sort particular genre movie by year, or, aplhabetically
     
 def show_movie_menu():
     print("0. To return to main menu")
     print("1. To search using movie name")
     print("2. To search using letters A-Z")
+    print("3. To add a movie")
 
 
 

@@ -101,3 +101,37 @@ class Genre:
 
         return [cls.instance_from_db(row) for row in rows]
     
+    @classmethod
+    def find_by_id(cls, id_):
+        sql = """
+            select * 
+            from genres 
+            where genre_id = ?
+            """
+
+        row = CURSOR.execute(sql, (id_,)).fetchone()
+        return Genre.instance_from_db(row)
+    
+    
+    @classmethod
+    def find_by_name(cls, name):
+        """Return a Genre object corresponding to first table row matching specified name"""
+        sql = """
+            SELECT *
+            FROM genres
+            WHERE name is ?
+        """
+
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
+    def movies(self):
+        from models.movie import Movie
+        sql = """
+            select * 
+            from movies
+            where genre_id = ?
+        """
+
+        rows = CURSOR.execute(sql, (self.id,)).fetchall()
+        return [Movie.instance_from_db(row) for row in rows]

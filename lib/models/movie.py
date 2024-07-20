@@ -18,7 +18,7 @@ class Movie:
             {'-'*40}
             # Movie Details
             # Name: {self.name}
-            
+            # Genre: {Genre.all[int(self.genre_id)].name}
             # Release Year: {self.release_year}
             {'-'*40}
             """
@@ -121,7 +121,7 @@ class Movie:
         sql = """
             SELECT *
             FROM movies
-            WHERE name is ?
+            WHERE name = ?
         """
 
         row = CURSOR.execute(sql, (name,)).fetchone()

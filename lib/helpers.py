@@ -15,10 +15,26 @@ def find_all_by_movie_name(movie_name):
             print(movie)
     else:
         print("Sorry no movies available!")
-        print("Want to add a new movie?")
+        print("Want to add a new movie? Select option 3.")
 
-def helper_3():
-    print("Performing useful function#3.")
+def add_new_movie():
+    print("Please enter below movie details.")
+    name = input("name: ")
+    release_year =(input("release year: "))
+    description =input("description: ")
+    genres = ", ".join(genre.name for genre in Genre.get_all())
+    genre= input(f"Choose a genre from the following list: {genres}\n")
+    # get genre id from genre name
+    genre_id = get_genre_id(genre)
+    print(f'genre_id: {genre_id}')
+    movie = Movie.create(name=name, release_year=release_year, description=description, genre_id=genre_id)
+    print("new movie added successfully")
+    print(movie)
+
+def get_genre_id(genre):
+    genre_returned = Genre.find_by_name(genre)
+    print(f"genre_returned: {genre_returned}")
+    return genre_returned.id if genre_returned else None
 
 
 def exit_program():
