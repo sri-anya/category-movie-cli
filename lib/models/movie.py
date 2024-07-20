@@ -12,13 +12,13 @@ class Movie:
         self.release_year = release_year
         self.description = description
         self.genre_id = genre_id
-
+ # Genre: {Genre.all[self.genre_id].name}
     def __repr__(self):
         s = f"""
             {'-'*40}
             # Movie Details
             # Name: {self.name}
-            # Genre: {Genre.all[self.genre_id].name}
+            
             # Release Year: {self.release_year}
             {'-'*40}
             """
@@ -102,3 +102,27 @@ class Movie:
         rows = CURSOR.execute(sql).fetchall()
 
         return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod
+    def find_all_by_name(cls, movie_name):
+        sql = """
+            SELECT * 
+            FROM movies
+            WHERE name LIKE ?
+        """
+
+        rows = CURSOR.execute(sql,('%'+ movie_name + '%',)).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod
+    def find_by_name(cls, name):
+        """Return a Movie object corresponding to first table row matching specified name"""
+        sql = """
+            SELECT *
+            FROM movies
+            WHERE name is ?
+        """
+
+        row = CURSOR.execute(sql, (name,)).fetchone()
+        return cls.instance_from_db(row) if row else None

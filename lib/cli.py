@@ -4,7 +4,7 @@ from pyfiglet import Figlet
 from helpers import (
     exit_program,
     display_all_genres, 
-    helper_2
+    find_all_by_movie_name
 )
 
 
@@ -38,13 +38,20 @@ def main():
                 {'-'*40}
                 """
             print(s)
-            show_movie_menu()
+            while True:
+                show_movie_menu()
+                choice = input("> ")
+                if choice == "0":
+                    break
+                elif choice == "1":
+                    movie = input("Enter movie name: ")
+                    find_all_by_movie_name(movie)
+            
         else:
             print("Invalid choice")
 
 
 def menu():
-    
     print("Please select an option:")
     print("0. Exit the program")
     print("1. Search movies based on Genre")
@@ -54,13 +61,10 @@ def show_genre_menu():
     print("0. To return to main menu")
     print("1. To search using genres")
     
-
-
-
 def show_movie_menu():
-    #option1: type movie name
-    # type letter that movie starts with
-    pass
+    print("0. To return to main menu")
+    print("1. To search using movie name")
+    print("2. To search using letters A-Z")
 
 
 
