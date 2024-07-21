@@ -31,8 +31,8 @@ class Movie:
             CREATE TABLE IF NOT EXISTS movies (
             id INTEGER PRIMARY KEY,
             name TEXT,
-            description TEXT,
             release_year INTEGER,
+            description TEXT,
             genre_id INTEGER,
             FOREIGN KEY (genre_id) REFERENCES genres(id))
         """
@@ -81,8 +81,8 @@ class Movie:
         if movie:
             # ensure attributes match row values in case local instance was modified
             movie.name = row[1]
-            movie.description = row[2]
-            movie.release_year = row[3]
+            movie.release_year = row[2]
+            movie.description = row[3]
             movie.genre_id = row[4]
         else:
             # not in dictionary, create new instance and add to dictionary
@@ -103,6 +103,18 @@ class Movie:
 
         return [cls.instance_from_db(row) for row in rows]
     
+    @classmethod
+    def find_by_id(cls, id_):
+        sql = """
+            select * 
+            from movies 
+            where id = ?
+            """
+
+        row = CURSOR.execute(sql, (id_,)).fetchone()
+        return Movie.instance_from_db(row)
+
+
     @classmethod
     def find_all_by_name(cls, movie_name):
         sql = """
@@ -126,3 +138,21 @@ class Movie:
 
         row = CURSOR.execute(sql, (name,)).fetchone()
         return cls.instance_from_db(row) if row else None
+    
+    def delete(self):
+        """Delete the table row corresponding to the current Movie instance,
+        delete the dictionary entry, and reassign id attribute"""
+
+        sql = """
+            DELETE FROM movies
+            WHERE id = ?
+        """
+
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+
+        # Delete the dictionary entry using id as the key
+        del type(self).all[self.id]
+
+        # Set the id to None
+        self.id = None

@@ -36,6 +36,25 @@ def get_genre_id(genre):
     print(f"genre_returned: {genre_returned}")
     return genre_returned.id if genre_returned else None
 
+def delete_movie():
+    movie = input("Name of the movie to be deleted?")
+    movie_instance = Movie.find_by_name(movie)
+    try:
+        movie_instance.delete()
+        print("Movie sucessfully deleted!")
+    except Exception as exc:
+        print(exc)
+
+def delete_genre():
+    genre = input("Name of the genre to be deleted?")
+    genre_instance = Genre.find_by_name(genre)
+    try:
+        genre_instance.delete()
+        print("Genre sucessfully deleted!")
+    except Exception as exc:
+        print(exc)
+    
+    
 
 def exit_program():
     print("Goodbye!")

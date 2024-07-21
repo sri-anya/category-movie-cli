@@ -106,7 +106,7 @@ class Genre:
         sql = """
             select * 
             from genres 
-            where genre_id = ?
+            where id = ?
             """
 
         row = CURSOR.execute(sql, (id_,)).fetchone()
@@ -135,3 +135,21 @@ class Genre:
 
         rows = CURSOR.execute(sql, (self.id,)).fetchall()
         return [Movie.instance_from_db(row) for row in rows]
+    
+    def delete(self):
+        """Delete the table row corresponding to the current Genre instance,
+        delete the dictionary entry, and reassign id attribute"""
+
+        sql = """
+            DELETE FROM genres
+            WHERE id = ?
+        """
+
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+
+        # Delete the dictionary entry using id as the key
+        del type(self).all[self.id]
+
+        # Set the id to None
+        self.id = None

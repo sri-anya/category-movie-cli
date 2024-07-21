@@ -16,9 +16,10 @@ def reset_database():
     genre1 = Genre.create("Comedy", "Contains comdey scenes")
     genre2 = Genre.create("Action", "Contains Fight scenes")
     genre3 = Genre.create("Romance", "Contains Romantic scenes")
-    Movie.create("Die Hard", "Action movie example",1991, genre2.id)
-    Movie.create("Golmal", "comedy  movie example",2015, genre1.id)
-    Movie.create("Love Hard", "romantic movie example",2021, genre3.id)
+    Movie.create("Die Hard",1991, "Action movie example", genre2.id)
+    Movie.create("Golmal", 2015,"comedy  movie example", genre1.id)
+    Movie.create("Hangover", 2009,"comedy  movie example 2", genre1.id)
+    Movie.create("Love Hard", 2021,"romantic movie example", genre3.id)
 
     
 reset_database()

@@ -6,7 +6,9 @@ from helpers import (
     exit_program,
     display_all_genres, 
     find_all_by_movie_name,
-    add_new_movie
+    add_new_movie,
+    delete_movie,
+    delete_genre
 )
 
 
@@ -33,8 +35,20 @@ def main():
                 elif choice == "1":
                     display_all_genres()
                     genre_id_selected = int(input("Select the genre (Enter 1, 2, 3...): "))
-                    genre_selected = Genre.find_by_id(genre_id_selected-1)
-                    print(genre_selected.movies)
+                    genre_selected = Genre.find_by_id(genre_id_selected)
+                    print("Checkout selected movies")
+                    print(genre_selected.movies())
+                    print("Want to sort selected movies by release_year?")
+                    sorted_movies_by_release_year = sorted(genre_selected.movies(), key=lambda movie: movie.release_year)
+                    print(sorted_movies_by_release_year)
+                    sorted_movies_by_name = sorted(genre_selected.movies(), key=lambda movie: movie.name)
+                    print(sorted_movies_by_name)
+                elif choice == "2":
+                    delete_genre()
+                else:
+                    print("Invalid choice, returning to main menu!")
+                    break
+
 
                     
         elif choice == "2":
@@ -56,6 +70,10 @@ def main():
                     input("Enter a letter from A-Z")
                 elif choice == "3":
                     add_new_movie()
+                elif choice == "4":
+                    delete_movie()
+                # elif choice == "5":
+                #     update_movie()
                 else:
                     print("Invalid choice! returning to main menu.")
                     break
@@ -74,12 +92,16 @@ def show_genre_menu():
     print("0. To return to main menu")
     print("1. To search using genres")
     # sort particular genre movie by year, or, aplhabetically
+    print("2. Delete a genre.") # pending
+    print("3. Update a genre.") # pending
     
 def show_movie_menu():
     print("0. To return to main menu")
     print("1. To search using movie name")
-    print("2. To search using letters A-Z")
+    print("2. To search using letters A-Z") # pending
     print("3. To add a movie")
+    print("4. To delete a movie") # pending
+    print("5. To update a movie") # pending
 
 
 
