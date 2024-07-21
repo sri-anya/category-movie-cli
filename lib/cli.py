@@ -8,7 +8,9 @@ from helpers import (
     find_all_by_movie_name,
     add_new_movie,
     delete_movie,
-    delete_genre
+    delete_genre,
+    update_genre,
+    update_movie
 )
 
 
@@ -45,12 +47,11 @@ def main():
                     print(sorted_movies_by_name)
                 elif choice == "2":
                     delete_genre()
+                elif choice == "3":
+                    update_genre()
                 else:
                     print("Invalid choice, returning to main menu!")
-                    break
-
-
-                    
+                    break                    
         elif choice == "2":
             s = f"""
                 {'-'*40}
@@ -72,12 +73,11 @@ def main():
                     add_new_movie()
                 elif choice == "4":
                     delete_movie()
-                # elif choice == "5":
-                #     update_movie()
+                elif choice == "5":
+                    update_movie()
                 else:
                     print("Invalid choice! returning to main menu.")
                     break
-            
         else:
             print("Invalid choice")
 
@@ -92,19 +92,16 @@ def show_genre_menu():
     print("0. To return to main menu")
     print("1. To search using genres")
     # sort particular genre movie by year, or, aplhabetically
-    print("2. Delete a genre.") # pending
-    print("3. Update a genre.") # pending
+    print("2. Delete a genre.") 
+    print("3. Update a genre.") 
     
 def show_movie_menu():
     print("0. To return to main menu")
     print("1. To search using movie name")
     print("2. To search using letters A-Z") # pending
     print("3. To add a movie")
-    print("4. To delete a movie") # pending
-    print("5. To update a movie") # pending
-
-
-
+    print("4. To delete a movie") 
+    print("5. To update a movie")
 
 if __name__ == "__main__":
     main()

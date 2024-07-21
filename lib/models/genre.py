@@ -153,3 +153,13 @@ class Genre:
 
         # Set the id to None
         self.id = None
+    
+    def update(self):
+        """Update the table row corresponding to the current Genre instance."""
+        sql = """
+            UPDATE genres
+            SET name = ?, description = ?, created_at = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.name, self.description, self.created_at, self.id))
+        CONN.commit()

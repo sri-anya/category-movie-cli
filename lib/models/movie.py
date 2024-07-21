@@ -156,3 +156,14 @@ class Movie:
 
         # Set the id to None
         self.id = None
+
+   
+    def update(self):
+        """Update the table row corresponding to the current Movie instance."""
+        sql = """
+            UPDATE movies
+            SET name = ?, release_year = ?, description = ?, genre_id = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.name, self.release_year, self.description, self.genre_id, self.id))
+        CONN.commit()

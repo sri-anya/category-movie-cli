@@ -51,8 +51,47 @@ def delete_genre():
     try:
         genre_instance.delete()
         print("Genre sucessfully deleted!")
-    except Exception as exc:
-        print(exc)
+    except:
+        print(f"Genre {genre} not found")
+
+def update_genre():
+    id_ = input("Enter the genre's id: ")
+    genre = Genre.find_by_id(id_)
+    if genre:
+        try:
+            name = input("Enter the genre's new name: ")
+            genre.name = name
+            description = input("Enter the genre's new description: ")
+            genre.description = description
+            created_at = input("Enter the genre's new creation date: ")
+            genre.created_at = created_at
+
+            genre.update()
+            print(f'Success: {genre}')
+        except Exception as exc:
+            print("Error updating genre: ", exc)
+    else:
+        print(f'Genre {id_} not found')
+
+def update_movie():
+    id_ = input("Enter the movie's id: ")
+    if movie := Movie.find_by_id(id_):
+        try:
+            name = input("Enter the movie's new name: ")
+            movie.name = name
+            release_year = input("Enter the movie's new release_year: ")
+            movie.release_year = release_year
+            description = input("Enter the movie's new description: ")
+            movie.description = description
+            genre_id = input("Enter the movie's new genre: ")
+            movie.genre_id = genre_id
+            
+            movie.update()
+            print(f'Success: {movie}')
+        except Exception as exc:
+            print("Error updating movie: ", exc)
+    else:
+        print(f'Movie {id_} not found')
     
     
 
