@@ -1,12 +1,38 @@
 # lib/helpers.py
 from models.genre import Genre
 from models.movie import Movie
+from tabulate import tabulate
+from colorama import Fore, Back, Style
 
 def display_all_genres():
     genres = Genre.get_all()
     for (idx, genre) in enumerate(genres, start=1):
-        print(f'{idx}. {genre.name}')
+        print(f'\t{idx}. {genre.name}')
     print()
+
+def display_selected_genre():
+    genre_id_selected = int(input(f"Select the genre (Enter 1, 2, 3...{len(Genre.all)}): "))
+    if genre_id_selected > len(Genre.all) or genre_id_selected<1:
+        print("""Sorry selected genre does not exist. Returning to main menu.""")
+        return -1
+    genre_selected = Genre.find_by_id(genre_id_selected)
+    
+    selected_movies = genre_selected.movies()
+    print(f"Checkout {genre_selected.name} movies")
+    if selected_movies:
+        # for movie in selected_movies:
+        #     print(f"""
+        #     {movie.name} """)
+        # print("")
+        print("Want to sort selected movies by release_year?")
+        sorted_movies_by_release_year = sorted(genre_selected.movies_from_db(), key=lambda movie: movie[2], reverse=True)
+        print(tabulate(sorted_movies_by_release_year,headers=['Name' , 'release_year', 'description', 'genre_id'], tablefmt="grid", numalign="center"))
+        # sorted_movies_by_name = sorted(genre_selected.movies(), key=lambda movie: movie.name)
+        # print(sorted_movies_by_name)
+    else:
+        print(Fore.RED, "Sorry no movies for this genre!!")
+        print(Fore.RESET)
+    return None
 
 def find_all_by_movie_name(movie_name):
     movies = Movie.find_all_by_name(movie_name)
