@@ -41,10 +41,10 @@ def generate_random_year(start_year=1900, end_year=2023):
 def generate_movie_description():
     protagonist = fake.name()
     location = fake.city()
-    event = fake.sentence(nb_words=5, variable_nb_words=True)
-    twist = fake.sentence(nb_words=5, variable_nb_words=True)
+    event = fake.sentence(nb_words=3, variable_nb_words=True)
+    twist = fake.sentence(nb_words=3, variable_nb_words=True)
     return (f"{protagonist}, a resident of {location}, encounters {event.lower()} "
-            f"and must navigate {twist.lower()}. An unexpected journey unfolds.")
+            f"and must navigate {twist.lower()}.")
 
 def generate_random_genre():
     genre_name = random.choice(GENRES)

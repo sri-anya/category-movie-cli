@@ -163,3 +163,14 @@ class Genre:
         """
         CURSOR.execute(sql, (self.name, self.description, self.created_at, self.id))
         CONN.commit()
+
+    def movies_from_db(self):
+        from models.movie import Movie
+        sql = """
+            select * 
+            from movies
+            where genre_id = ?
+        """
+
+        rows = CURSOR.execute(sql, (self.id,)).fetchall()
+        return rows
