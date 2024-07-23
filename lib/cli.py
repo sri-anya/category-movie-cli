@@ -51,8 +51,10 @@ def main():
                     if x == -1:
                         break
                 elif choice == "2":
+                    print()
                     delete_genre()
                 elif choice == "3":
+                    print()
                     update_genre()
                 else:
                     print()
@@ -101,8 +103,7 @@ def main():
 
 
 def menu():
-    print(Back.GREEN,"Please select an option (0/1/2):", end=" ")
-    print(Back.RESET)
+    print(Back.GREEN,"Please select an option (0/1/2): "+Style.RESET_ALL)
     print("0. Exit the program")
     print("1. Search movies based on Genre")
     print("2. Search movies based on movie name")
@@ -110,8 +111,7 @@ def menu():
 
 def show_genre_menu():
     print("\t",end="")
-    print(Back.GREEN,"Please select an option (0/1/2/3):", end=" ")
-    print(Back.RESET)
+    print(Back.GREEN,"Please select an option (0/1/2/3): "+Style.RESET_ALL)
     print("\t0. To return to main menu")
     print("\t1. To search using genres")
     # sort particular genre movie by year, or, aplhabetically
@@ -120,8 +120,7 @@ def show_genre_menu():
     
 def show_movie_menu():
     print("\t",end="")
-    print(Back.GREEN,"Please select an option (0/1/2/3/4/5):", end=" ")
-    print(Back.RESET)
+    print(Back.GREEN,"Please select an option (0/1/2/3/4/5): "+Style.RESET_ALL)
     print("\t0. To return to main menu")
     print("\t1. To search using movie name")
     print("\t2. To search using letters A-Z") # pending

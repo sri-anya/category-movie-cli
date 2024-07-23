@@ -8,25 +8,17 @@ fake = Faker()
 print("seeding database")
 GENRES = [
     "Action",
-    "Adventure",
     "Animation",
     "Comedy",
     "Crime",
     "Drama",
     "Fantasy",
-    "Historical",
     "Horror",
     "Mystery",
-    "Musical",
     "Romance",
     "Sci-Fi",
-    "Sports",
     "Thriller",
-    "War",
-    "Western",
-    "Documentary",
-    "Family",
-    "Film Noir"
+    "Family"
 ]
 
 def generate_movie_name():
