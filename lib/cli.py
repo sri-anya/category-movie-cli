@@ -13,7 +13,8 @@ from helpers import (
     delete_genre,
     update_genre,
     update_movie,
-    display_selected_genre
+    display_selected_genre,
+    create_genre
 )
 
 
@@ -28,7 +29,7 @@ def main():
         print()
         if choice == "0":
             exit_program()
-        elif choice == "1":
+        elif choice == "1": #GENRE
             s = f"""
             {'-'*10}
             # Genre
@@ -56,13 +57,16 @@ def main():
                 elif choice == "3":
                     print()
                     update_genre()
+                elif choice == "4":
+                    print()
+                    create_genre()
                 else:
                     print()
                     print(Fore.RED, "\tInvalid choice, returning to main menu!" + Fore.RESET)
                     print("\t"+"*"*50)
                     print()
                     break                    
-        elif choice == "2":
+        elif choice == "2": # MOVIE
             s = f"""
             {'-'*10}
             # Movie
@@ -80,7 +84,7 @@ def main():
                     print()
                     break
                 elif choice == "1":
-                    movie = input("Enter movie name: ")
+                    movie = input(Fore.YELLOW+ "\tEnter the movie name: "+ Fore.RESET)
                     find_all_by_movie_name(movie)
                 elif choice == "2":
                     input("Enter a letter from A-Z")
@@ -114,9 +118,9 @@ def show_genre_menu():
     print(Back.GREEN,"Please select an option (0/1/2/3): "+Style.RESET_ALL)
     print("\t0. To return to main menu")
     print("\t1. To search using genres")
-    # sort particular genre movie by year, or, aplhabetically
     print("\t2. Delete a genre.") 
     print("\t3. Update a genre.") 
+    print("\t4. Create a genre.") 
     
 def show_movie_menu():
     print("\t",end="")

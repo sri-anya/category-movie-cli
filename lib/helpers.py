@@ -46,39 +46,55 @@ def display_selected_genre():
 def find_all_by_movie_name(movie_name):
     movies = Movie.find_all_by_name(movie_name)
     if movies:
-        for movie in movies:
-            print(movie)
+        print(tabulate(movies, headers=['Name' , 'release_year', 'description', 'genre_id'], tablefmt="grid", numalign="center"))
+        # for movie in movies:
+        #     print(movie)
     else:
-        print("Sorry no movies available!")
-        print("Want to add a new movie? Select option 3.")
+        print(Fore.RED+"\tSorry no movies available!"+ Fore.RESET)
+        print(Fore.BLUE+"\tWant to add a new movie? Select option 3 from the menu."+Fore.RESET)
+        print("\t"+"*"*50)
+    print()
 
 def add_new_movie():
-    print("Please enter below movie details.")
-    name = input("name: ")
-    release_year =(input("release year: "))
-    description =input("description: ")
+    print(Fore.BLUE+"\tPlease enter below movie details.")
+    name = input(Fore.YELLOW+"\tname: "+Fore.RESET)
+    if name=="":
+        print(Fore.RED+"\tSorry name cannot be empty."+Fore.RESET)
+        print()
+        return
+    release_year =input(Fore.YELLOW+"\trelease year: "+Fore.RESET)
+    description =input(Fore.YELLOW+"\tdescription: "+Fore.RESET)
     genres = ", ".join(genre.name for genre in Genre.get_all())
-    genre= input(f"Choose a genre from the following list: {genres}\n")
+    genre= input(Fore.YELLOW+"\tChoose a genre from the following list: "+ Fore.LIGHTMAGENTA_EX+ f"{genres}"+"\n"+Style.RESET_ALL)
     # get genre id from genre name
     genre_id = get_genre_id(genre)
-    print(f'genre_id: {genre_id}')
-    movie = Movie.create(name=name, release_year=release_year, description=description, genre_id=genre_id)
-    print("new movie added successfully")
-    print(movie)
+    if genre_id:
+        movie = Movie.create(name=name, release_year=release_year, description=description, genre_id=genre_id)
+        print(Fore.GREEN+"\t\tnew movie added successfully"+Fore.RESET)
+        print(movie)
+    else:
+        print(Fore.RED+"\tGenre not found.. Returning to current menu...")
+        print("\t"+"*"*50)
+        print()
+        return
+    print("\t"+"*"*50)
+    print()
 
 def get_genre_id(genre):
     genre_returned = Genre.find_by_name(genre)
-    print(f"genre_returned: {genre_returned}")
     return genre_returned.id if genre_returned else None
 
 def delete_movie():
-    movie = input("Name of the movie to be deleted?")
+    print()
+    movie = input(Fore.YELLOW+"\tName of the movie to be deleted?"+Fore.RESET)
     movie_instance = Movie.find_by_name(movie)
     try:
         movie_instance.delete()
-        print("Movie sucessfully deleted!")
-    except Exception as exc:
-        print(exc)
+        print(Fore.GREEN+"\tMovie sucessfully deleted!"+Fore.RESET)
+    except Exception:
+        print(Fore.RED+f"\tMovie {movie} not found! "+Fore.RESET)
+    print("\t"+"*"*50)
+    print()
 
 def delete_genre():
     genre = input(Fore.YELLOW+"\tName of the genre to be deleted: "+Fore.RESET)
@@ -91,23 +107,48 @@ def delete_genre():
         print()
 
 def update_genre():
-    id_ = input("Enter the genre's id: ")
-    genre = Genre.find_by_id(id_)
+    genre_selected = input(Fore.YELLOW+"\tName of the genre you want to update: "+Fore.RESET)
+    genre = Genre.find_by_name(genre_selected)
     if genre:
         try:
-            name = input("Enter the genre's new name: ")
-            genre.name = name
-            description = input("Enter the genre's new description: ")
-            genre.description = description
-            created_at = input("Enter the genre's new creation date: ")
-            genre.created_at = created_at
-
-            genre.update()
-            print(f'Success: {genre}')
-        except Exception as exc:
-            print(Fore.RED+f"\tError updating genre"+Fore.RESET)
+            print(Fore.GREEN+"\t\t"+"-"*40+Fore.RESET)
+            name = input(Fore.GREEN+"\t\tEnter the genre's new name: "+Fore.RESET)
+            if name:
+                genre.name = name
+            else:
+                genre.name = genre.name
+                print(Fore.YELLOW+"\t\t"+"No change in genre name."+ Fore.RESET)
+                print()
+            description = input(Fore.GREEN+"\t\tEnter the genre's new description: "+Fore.RESET)
+            if description:
+                genre.description = description
+            else:
+                genre.description = genre.description
+                print(Fore.YELLOW+"\t\t"+"No change in genre description."+ Fore.RESET)
+                print()
+            created_at = input(Fore.GREEN+"\t\tEnter the genre's new creation date: "+Fore.RESET)
+            if created_at:
+                genre.created_at = created_at
+            else:
+                genre.created_at = genre.created_at
+                print(Fore.YELLOW+"\t\t"+"No change in genre creation date."+ Fore.RESET)
+                print()
+            
+            confirmation = input(Fore.RED+"\t\tSure about updating? Y/N: "+Fore.RESET)
+            print(Fore.GREEN+"\t\t"+"-"*40+Fore.RESET)
+            if confirmation == 'Y':
+                genre.update()
+                print()
+                print(Fore.YELLOW+"\t"+f'Success: Information for genre {genre.name} updated.'+ Fore.RESET)
+                print("\t"+"*"*50+"\n")
+                
+            else:
+                return
+        except:
+            print(Fore.RED+f"\tError updating genre."+Fore.RESET)
     else:
-        print(Fore.RED+f"\tGenre {id_} not found!! Returning to current menu.."+Fore.RESET)
+        print(Fore.RED+f"\tGenre {genre_selected} not found!! Returning to current menu.."+Fore.RESET)
+        print()
 
 def update_movie():
     id_ = input("Enter the movie's id: ")
@@ -121,13 +162,28 @@ def update_movie():
             movie.description = description
             genre_id = input("Enter the movie's new genre: ")
             movie.genre_id = genre_id
-            
             movie.update()
             print(f'Success: {movie}')
         except Exception as exc:
             print("Error updating movie: ", exc)
     else:
         print(f'Movie {id_} not found')
+
+
+def create_genre():
+    name = input(Fore.YELLOW+"\tEnter the genre's name: "+ Fore.RESET)
+    if (Genre.find_by_name(name)).id in Genre.all:
+        print(Fore.RED + f"\tGenre {name} already exists.."+Fore.RESET)
+        print()
+        return
+    description = input(Fore.YELLOW+"\tEnter the genre's description: "+ Fore.RESET)
+    creation_date = input(Fore.YELLOW+"\tEnter the genre's creation date: "+ Fore.RESET)
+
+    try:
+        genre = Genre.create(name, description, creation_date)
+        print(Fore.GREEN+ f'\tSuccess: Genre {genre.name} is created'+ Fore.RESET)
+    except Exception as exc:
+        print(Fore.RED + f"\tError creating genre: "+Fore.RESET)
     
     
 

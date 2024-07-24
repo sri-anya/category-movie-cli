@@ -18,7 +18,7 @@ class Movie:
             {'-'*40}
             # Movie Details
             # Name: {self.name}
-            # Genre: {Genre.all[int(self.genre_id)].name}
+            # Genre: {(Genre.find_by_id(self.genre_id)).name}
             # Release Year: {self.release_year}
             {'-'*40}
             """
@@ -125,7 +125,7 @@ class Movie:
 
         rows = CURSOR.execute(sql,('%'+ movie_name + '%',)).fetchall()
 
-        return [cls.instance_from_db(row) for row in rows]
+        return rows
     
     @classmethod
     def find_by_name(cls, name):
