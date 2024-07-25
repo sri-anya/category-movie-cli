@@ -5,6 +5,7 @@ from models.genre import Genre
 class Movie:
 
     all = {}
+    movie_names = set()
     
     def __init__(self, name, release_year, description, genre_id, id = None):
         self.id = id
@@ -12,6 +13,7 @@ class Movie:
         self.release_year = release_year
         self.description = description
         self.genre_id = genre_id
+        Movie.movie_names.add(self.name)
  # Genre: {Genre.all[self.genre_id].name}
     def __repr__(self):
         s = f"""
@@ -23,6 +25,63 @@ class Movie:
             {'-'*40}
             """
         return s
+    
+    @property
+    def name(self):
+        """I'm the 'name' property."""
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        
+       
+        
+        # if (value in Movie.movie_names):
+            
+        #     raise NameError(
+        #         "Movie with name {value} present in database"
+        #     )
+        # el
+        if isinstance(value, str) and len(value):
+            self._name = value
+        else:
+            raise ValueError(
+                "Name must be a non-empty string"
+            )
+
+    @name.deleter
+    def name(self):
+        del self._name
+
+    @property
+    def release_year(self):
+        """I'm the 'name' property."""
+        return self._release_year
+
+    @release_year.setter
+    def release_year(self, value):
+        if  int(value) <=2024 and int(value)>=1900:
+            self._release_year = value
+        else:
+            raise ValueError(
+                "Release_year should be an integer value between 1900 and 2024"
+            )
+
+    @release_year.deleter
+    def release_year(self):
+        del self._release_year
+
+    @property
+    def genre_id(self):
+        return self._genre_id
+
+    @genre_id.setter
+    def genre_id(self, genre_id):
+        if type(genre_id) is int and Genre.find_by_id(genre_id):
+            self._genre_id = genre_id
+        else:
+            raise ValueError(
+                "genre_id must reference a genre in the database")
     
     @classmethod
     def create_table(cls):
@@ -124,6 +183,18 @@ class Movie:
         """
 
         rows = CURSOR.execute(sql,('%'+ movie_name + '%',)).fetchall()
+
+        return rows
+    
+    @classmethod
+    def find_all_by_first_char(cls, character):
+        sql = """
+            SELECT * 
+            FROM movies
+            WHERE name LIKE ?
+        """
+
+        rows = CURSOR.execute(sql,(character + '%',)).fetchall()
 
         return rows
     

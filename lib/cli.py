@@ -1,22 +1,22 @@
+#!/usr/bin/env python3
 # lib/cli.py
 from pyfiglet import Figlet
-from models.genre import Genre
-from tabulate import tabulate
 from colorama import Fore, Back, Style
-
-from helpers import (
+from genre_helpers import  (
+    display_all_genres,
+    display_selected_genre,
+    create_genre,
+    delete_genre,
+    update_genre
+)
+from movie_helpers import (
     exit_program,
-    display_all_genres, 
     find_all_by_movie_name,
     add_new_movie,
     delete_movie,
-    delete_genre,
-    update_genre,
     update_movie,
-    display_selected_genre,
-    create_genre
+    search_by_AZ
 )
-
 
 def main():
     f = Figlet(font='starwars')
@@ -87,7 +87,7 @@ def main():
                     movie = input(Fore.YELLOW+ "\tEnter the movie name: "+ Fore.RESET)
                     find_all_by_movie_name(movie)
                 elif choice == "2":
-                    input("Enter a letter from A-Z")
+                    search_by_AZ()
                 elif choice == "3":
                     add_new_movie()
                 elif choice == "4":

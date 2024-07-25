@@ -24,6 +24,48 @@ class Genre:
             """
         return s
     
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        if isinstance(value, str) and not value.isdigit() and len(value):
+            self._name = value
+        else:
+            raise ValueError(
+                "Name of genre cannot be empty and must contains strings."
+            )
+        
+    @property
+    def description(self):
+        return self._description
+
+    @description.setter
+    def description(self, value):
+        if isinstance(value, str) and not value.isdigit():
+            self._description = value
+        else:
+            raise ValueError(
+                "Description of genre cannot be only numbers."
+            )
+        
+    @property
+    def created_at(self):
+        return self._created_at
+
+    @created_at.setter
+    def created_at(self, value):
+        if value=="":
+            self._created_at=datetime.now().strftime('%Y-%m-%d')
+        elif value !="" and datetime.strptime(value, "%Y-%m-%d"):
+            self._created_at = value
+        else:
+            raise ValueError(
+                "Incorrect data format, should be YYYY-MM-DD"
+            )
+    
+    
     @classmethod
     def create_table(cls):
         """ Create a new table to persist the attributes of Genre instances """

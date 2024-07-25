@@ -5,7 +5,7 @@ from models.__init__ import CONN, CURSOR
 import ipdb
 from models.genre import Genre
 from models.movie import Movie
-from helpers import add_new_movie
+from lib.movie_helpers import add_new_movie
 
 def reset_database():
     Genre.drop_table()
