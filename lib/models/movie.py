@@ -5,7 +5,7 @@ from models.genre import Genre
 class Movie:
 
     all = {}
-    movie_names = set()
+    
     
     def __init__(self, name, release_year, description, genre_id, id = None):
         """
@@ -23,8 +23,7 @@ class Movie:
         self.release_year = release_year
         self.description = description
         self.genre_id = genre_id
-        Movie.movie_names.add(self.name)
- # Genre: {Genre.all[self.genre_id].name}
+        
     def __repr__(self):
         """
         Return a string representation of the Movie instance, displaying details about the movie.
@@ -69,20 +68,6 @@ class Movie:
             raise ValueError(
                 "Name must be a non-empty string"
             )
-        
-       
-        
-        # if (value in Movie.movie_names):
-            
-        #     raise NameError(
-        #         "Movie with name {value} present in database"
-        #     )
-        # el
-        
-
-    @name.deleter
-    def name(self):
-        del self._name
 
     @property
     def release_year(self):
@@ -111,13 +96,6 @@ class Movie:
             raise ValueError(
                 "Release_year should be an integer value between 1900 and 2024"
             )
-
-    @release_year.deleter
-    def release_year(self):
-        """
-        Delete the release year of the movie.
-        """
-        del self._release_year
 
     @property
     def genre_id(self):

@@ -20,6 +20,7 @@ GENRES = [
     "Thriller",
     "Family"
 ]
+movie_names = set()
 
 def generate_movie_name():
     """
@@ -33,7 +34,7 @@ def generate_movie_name():
     # Generate random words/phrases for the movie name
     adjective = fake.word(ext_word_list=['Dark', 'Silent', 'Amazing', 'Lost', 'Infinite', 'Brave', 'Golden', 'Mysterious', 'Eternal'])
     noun = fake.word(ext_word_list=['Journey', 'Warrior', 'Secret', 'Dream', 'Echo', 'Legacy', 'Quest', 'Realm', 'Destiny'])
-    return f"{adjective} {noun}"
+    movie_names.add( f"{adjective} {noun}")
 
 def generate_random_year(start_year=1900, end_year=2024):
     """
@@ -92,11 +93,13 @@ def main():
         Genre.create(genre, f"Contains {genre.lower()} scenes", fake.date() )
 
     for _ in range(20):
+        generate_movie_name()
 
         # if generate_movie_name() in movie_names:
         #     pass
         # else:
-        Movie.create(generate_movie_name(), generate_random_year(),generate_movie_description(), random.randint(1, len(Genre.all)))
+    for movie in movie_names:
+        Movie.create(movie, generate_random_year(),generate_movie_description(), random.randint(1, len(Genre.all)))
    
 
 if __name__=="__main__":
