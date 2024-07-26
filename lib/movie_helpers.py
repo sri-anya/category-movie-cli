@@ -5,6 +5,18 @@ from tabulate import tabulate
 from colorama import Fore, Back, Style
 
 def find_all_by_movie_name(movie_name):
+    """
+    Find and display all movies with the specified name.
+
+    This function searches the database for movies that match the given name and displays them in a tabular format.
+    If no movies are found, it informs the user and suggests adding a new movie.
+
+    Args:
+        movie_name (str): The name of the movie to search for.
+
+    Returns:
+        None
+    """
     movies = Movie.find_all_by_name(movie_name)
     if movies:
         print(tabulate(movies, headers=['Name' , 'release_year', 'description', 'genre_id'], tablefmt="grid", numalign="center"))
@@ -15,6 +27,16 @@ def find_all_by_movie_name(movie_name):
     print()
 
 def add_new_movie():
+    """
+    Add a new movie to the database.
+
+    Prompts the user to enter details for the new movie, including name, release year, description, and genre.
+    If the genre is valid, the movie is added to the database and a success message is displayed. If the genre
+    is not found, an error message is displayed.
+
+    Returns:
+        None
+    """
     print(Fore.BLUE+"\tPlease enter below movie details.")
     name = input(Fore.YELLOW+"\tname: "+Fore.RESET)
     if name=="":
@@ -44,6 +66,15 @@ def add_new_movie():
     print()
 
 def delete_movie():
+    """
+    Delete a movie from the database.
+
+    Prompts the user to enter the name of the movie to be deleted. If the movie is found, it is deleted and
+    a success message is displayed. If the movie is not found, an error message is displayed.
+
+    Returns:
+        None
+    """
     print()
     movie = input(Fore.YELLOW+"\tName of the movie to be deleted?"+Fore.RESET)
     movie_instance = Movie.find_by_name(movie)
@@ -56,6 +87,15 @@ def delete_movie():
     print()
 
 def update_movie():
+    """
+    Update the details of a movie in the database.
+
+    Prompts the user to enter the name of the movie to be updated, and allows updating of the movie's name,
+    release year, description, and genre. Confirms the update before applying changes.
+
+    Returns:
+        None
+    """
     movie_selected = input(Fore.YELLOW+"\tName of the movie you want to update: "+Fore.RESET)
     if movie_selected == "":
         print(Fore.RED+"\tName of the movie to update cannot be empty string"+Fore.RED)
@@ -107,17 +147,35 @@ def update_movie():
             else:
                 return
         except Exception as exc:
-            print(Fore.RED+"\t\tError updating movie."+Fore.RESET)
+            print(Fore.RED+f"\t\tError updating movie. Error: {exc}"+Fore.RESET)
             print()
     else:
         print(Fore.RED+f"\tMovie {movie_selected} not found!! Returning to current menu.."+Fore.RESET)
         print()
 
 def get_genre_id(genre):
+    """
+    Get the ID of a genre based on its name.
+
+    Args:
+        genre (str): The name of the genre.
+
+    Returns:
+        int: The ID of the genre if found, else None.
+    """
     genre_returned = Genre.find_by_name(genre)
     return genre_returned.id if genre_returned else None    
 
 def search_by_AZ():
+    """
+    Search for movies that start with a specific character.
+
+    Prompts the user to enter a character and searches for movies that start with that character. If movies are found,
+    they are displayed in a tabular format. If no movies are found, it informs the user and suggests adding a new movie.
+
+    Returns:
+        None
+    """
     character = input(Fore.YELLOW+"\tEnter a character: "+ Fore.RESET)
     if character.isalpha():
         movies = Movie.find_all_by_first_char(character=character)
@@ -137,5 +195,13 @@ def search_by_AZ():
 
 
 def exit_program():
+    """
+    Exit the program.
+
+    Prints a goodbye message and exits the program.
+
+    Returns:
+        None
+    """
     print("Goodbye!")
     exit()

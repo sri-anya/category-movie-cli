@@ -1,38 +1,94 @@
-# Phase 3 CLI+ORM Project Template
+# MovieDB CLI Project
 
-## Learning Goals
+This project is a command-line interface (CLI) application for managing a movie database. It allows users to perform various operations related to genres and movies, such as creating, updating, deleting, and searching. Below, you'll find descriptions of the key files and functions within this project.
 
-- Discuss the basic directory structure of a CLI.
-- Outline the first steps in building a CLI.
+### Screenshot
+![MovieDBScreenshot](MovieDB_CLI.png)
 
----
+## CLI Script: `cli.py`
 
-## Introduction
+The `cli.py` script is the main entry point for the MovieDB application. It presents a user-friendly menu system that allows users to navigate through different options for managing genres and movies. The script uses the `pyfiglet` library for stylized text and the `colorama` library for colorful terminal output.
 
-You now have a basic idea of what constitutes a CLI. Fork and clone this lesson
-for a project template for your CLI.
+### Main Functions
 
-Take a look at the directory structure:
+- `main()`: Initializes the CLI, displays the welcome message, and continuously displays the main menu until the user exits.
+- `menu()`: Displays the main menu options for the user to choose from.
+- `show_genre_menu()`: Displays the genre-specific options.
+- `show_movie_menu()`: Displays the movie-specific options.
+
+### Running the CLI
+
+To run the CLI, you can use one of the following commands:
 
 ```console
-.
-├── Pipfile
-├── Pipfile.lock
-├── README.md
-└── lib
-    ├── models
-    │   ├── __init__.py
-    │   └── model_1.py
-    ├── cli.py
-    ├── debug.py
-    └── helpers.py
+python lib/cli.py
+```
+or
+
+```console
+./lib/cli.py
+```
+Make sure the lib/cli.py file has execute permissions if you are using the second method. You can add execute permissions with the following command:
+
+```console
+chmod +x lib/cli.py
 ```
 
-Note: The directory also includes two files named `CONTRIBUTING.md` and
-`LICENSE.md` that are specific to Flatiron's curriculum. You can disregard or
-delete the files if you want.
+## Genre Helpers: `genre_helpers.py`
 
----
+This file contains helper functions for managing genres in the MovieDB application.
+
+### Functions
+
+- `display_all_genres()`: Retrieves and displays all genres from the database.
+- `display_selected_genre()`: Allows the user to select a genre and displays movies associated with the selected genre, sorted by year or name.
+- `delete_genre()`: Prompts the user to delete a genre by name.
+- `update_genre()`: Prompts the user to update details of an existing genre.
+- `create_genre()`: Prompts the user to create a new genre with a name, description, and creation date.
+
+## Movie Helpers: `movie_helpers.py`
+
+This file contains helper functions for managing movies in the MovieDB application.
+
+### Functions
+
+- `find_all_by_movie_name(movie_name)`: Finds and displays all movies by the given name.
+- `add_new_movie()`: Prompts the user to add a new movie with details such as name, release year, description, and genre.
+- `delete_movie()`: Prompts the user to delete a movie by name.
+- `update_movie()`: Prompts the user to update details of an existing movie.
+- `search_by_AZ()`: Allows the user to search for movies by the first letter of their name.
+- `exit_program()`: Exits the CLI program.
+
+## Debugging Script: `debug.py`
+
+This script is used for debugging purposes. It resets the database and populates it with sample data for testing.
+
+### Functions
+
+- `reset_database()`: Resets the database by dropping and recreating the Genre and Movie tables, and populates them with sample data.
+- `ipdb.set_trace()`: Starts an interactive debugger session.
+
+## Seeding Script: `seed.py`
+
+This script is used to seed the database with random data using the `Faker` library.
+
+### Functions
+
+- `generate_movie_name()`: Generates a random movie name.
+- `generate_random_year(start_year, end_year)`: Generates a random year between `start_year` and `end_year`.
+- `generate_movie_description()`: Generates a random movie description.
+- `generate_random_genre()`: Generates a random genre.
+- `main()`: Main function to reset and seed the database with random genres and movies.
+
+## Models
+
+### Genre Model
+
+The `Genre` model represents a genre in the MovieDB application. It includes methods for creating, finding, updating, and deleting genres.
+
+### Movie Model
+
+The `Movie` model represents a movie in the MovieDB application. It includes methods for creating, finding, updating, and deleting movies.
 
 ## Generating Your Environment
 
@@ -46,127 +102,11 @@ pipenv install
 pipenv shell
 ```
 
----
-
-## Generating Your CLI
-
-A CLI is, simply put, an interactive script and prompts the user and performs
-operations based on user input.
-
-The project template has a sample CLI in `lib/cli.py` that looks like this:
-
-```py
-# lib/cli.py
-
-from helpers import (
-    exit_program,
-    helper_1
-)
-
-
-def main():
-    while True:
-        menu()
-        choice = input("> ")
-        if choice == "0":
-            exit_program()
-        elif choice == "1":
-            helper_1()
-        else:
-            print("Invalid choice")
-
-
-def menu():
-    print("Please select an option:")
-    print("0. Exit the program")
-    print("1. Some useful function")
-
-
-if __name__ == "__main__":
-    main()
-```
-
-The helper functions are located in `lib/helpers.py`:
-
-```py
-# lib/helpers.py
-
-def helper_1():
-    print("Performing useful function#1.")
-
-
-def exit_program():
-    print("Goodbye!")
-    exit()
-```
-
-You can run the template CLI with `python lib/cli.py`, or include the shebang
-and make it executable with `chmod +x`. The template CLI will ask for input, do
-some work, and accomplish some sort of task.
-
-Past that, CLIs can be whatever you'd like, as long as you follow the project
-requirements.
-
-Of course, you will update `lib/cli.py` with prompts that are appropriate for
-your application, and you will update `lib/helpers.py` to replace `helper_1()`
-with a useful function based on the specific problem domain you decide to
-implement, along with adding other helper functions to the module.
-
-In the `lib/models` folder, you should rename `model_1.py` with the name of a
-data model class from your specific problem domain, and add other classes to the
-folder as needed. The file `lib/models/__init__.py` has been initialized to
-create the necessary database constants. You need to add import statements to
-the various data model classes in order to use the database constants.
-
-You are also welcome to implement a different module and directory structure.
-However, your project should be well organized, modular, and follow the design
-principal of separation of concerns, which means you should separate code
-related to:
-
-- User interface
-- Data persistence
-- Problem domain rules and logic
-
----
-
-## Updating README.md
-
-`README.md` is a Markdown file that should describe your project. You will
-replace the contents of this `README.md` file with a description of **your**
-actual project.
-
-Markdown is not a language that we cover in Flatiron's Software Engineering
-curriculum, but it's not a particularly difficult language to learn (if you've
-ever left a comment on Reddit, you might already know the basics). Refer to the
-cheat sheet in this assignments's resources for a basic guide to Markdown.
-
-### What Goes into a README?
-
-This README serves as a template. Replace the contents of this file to describe
-the important files in your project and describe what they do. Each Python file
-that you edit should get at least a paragraph, and each function should be
-described with a sentence or two.
-
-Describe your actual CLI script first, and with a good level of detail. The rest
-should be ordered by importance to the user. (Probably functions next, then
-models.)
-
-Screenshots and links to resources that you used throughout are also useful to
-users and collaborators, but a little more syntactically complicated. Only add
-these in if you're feeling comfortable with Markdown.
-
----
-
-## Conclusion
-
-A lot of work goes into a good CLI, but it all relies on concepts that you've
-practiced quite a bit by now. Hopefully this template and guide will get you off
-to a good start with your Phase 3 Project.
-
-Happy coding!
-
----
-
 ## Resources
 
-- [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/)
+- [Faker Documentation](https://faker.readthedocs.io/en/master/)
+- [Tabulate Documentation](https://pypi.org/project/tabulate/)
+- [Colorama Documentation](https://pypi.org/project/colorama/)
+- [Pyfiglet Documentation](https://github.com/pwaller/pyfiglet)
+
+

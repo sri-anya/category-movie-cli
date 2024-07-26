@@ -19,6 +19,15 @@ from movie_helpers import (
 )
 
 def main():
+    """
+    Main function to run the CLI application.
+
+    Displays the main menu and handles user input for navigating the application.
+    Users can select options to manage genres and movies, or exit the program.
+
+    Returns:
+        None
+    """
     f = Figlet(font='starwars')
     print()
     print(Fore.BLUE, f.renderText(('MovieDB').center(10," ")))
@@ -107,6 +116,14 @@ def main():
 
 
 def menu():
+    """
+    Display the main menu.
+
+    Provides options for the user to exit the program, manage genres, or search for movies.
+
+    Returns:
+        None
+    """
     print(Back.GREEN,"Please select an option (0/1/2): "+Style.RESET_ALL)
     print("0. Exit the program")
     print("1. Search movies based on Genre")
@@ -114,6 +131,14 @@ def menu():
     print()
 
 def show_genre_menu():
+    """
+    Display the genre menu.
+
+    Provides options for the user to return to the main menu, search for genres, delete, update, or create genres.
+
+    Returns:
+        None
+    """
     print("\t",end="")
     print(Back.GREEN,"Please select an option (0/1/2/3): "+Style.RESET_ALL)
     print("\t0. To return to main menu")
@@ -123,6 +148,15 @@ def show_genre_menu():
     print("\t4. Create a genre.") 
     
 def show_movie_menu():
+    """
+    Display the movie menu.
+
+    Provides options for the user to return to the main menu, search for movies by name or initial letter,
+    add, delete, or update movies.
+
+    Returns:
+        None
+    """
     print("\t",end="")
     print(Back.GREEN,"Please select an option (0/1/2/3/4/5): "+Style.RESET_ALL)
     print("\t0. To return to main menu")

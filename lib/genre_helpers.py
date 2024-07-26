@@ -4,12 +4,23 @@ from tabulate import tabulate
 from colorama import Fore, Back, Style
 
 def display_all_genres():
+    """
+    Display all genres stored in the database.
+
+    Retrieves all genres and prints each genre's name with an index.
+    """
     genres = Genre.get_all()
     for (idx, genre) in enumerate(genres, start=1):
         print(f'\t{idx}. {genre.name}')
     print()
 
 def display_selected_genre():
+    """
+    Display detailed information for a selected genre.
+
+    Prompts the user to select a genre by its index and displays information about the selected genre,
+    including its associated movies. The user can choose to sort the movies by release year or name.
+    """
     genre_id_selected = int(input(Fore.YELLOW+f"\tSelect the genre (Enter 1, 2...{len(Genre.all)}): " +Fore.RESET))
     if genre_id_selected > len(Genre.all) or genre_id_selected<1:
         print(Fore.RED+ "\tSorry selected genre does not exist. Returning to main menu."+ Fore.RESET)
@@ -43,6 +54,12 @@ def display_selected_genre():
     return None
 
 def delete_genre():
+    """
+    Delete a genre from the database.
+
+    Prompts the user to enter the name of the genre to be deleted and attempts to delete it.
+    If the genre is not found, an error message is displayed.
+    """
     genre = input(Fore.YELLOW+"\tName of the genre to be deleted: "+Fore.RESET)
     genre_instance = Genre.find_by_name(genre)
     try:
@@ -53,6 +70,12 @@ def delete_genre():
         print()
 
 def update_genre():
+    """
+    Update the details of a genre in the database.
+
+    Prompts the user to enter the name of the genre to be updated, and allows updating of the genre's name,
+    description, and creation date. Confirms the update before applying changes.
+    """
     genre_selected = input(Fore.YELLOW+"\tName of the genre you want to update: "+Fore.RESET)
     genre = Genre.find_by_name(genre_selected)
     if genre:
@@ -97,6 +120,12 @@ def update_genre():
         print()
 
 def create_genre():
+    """
+    Create a new genre in the database.
+
+    Prompts the user to enter the name, description, and creation date of the new genre.
+    If a genre with the same name already exists, an error message is displayed.
+    """
     name = input(Fore.YELLOW+"\tEnter the genre's name: "+ Fore.RESET)
     if Genre.find_by_name(name) and (Genre.find_by_name(name)).id in Genre.all:
         print(Fore.RED + f"\tGenre {name} already exists.."+Fore.RESET)

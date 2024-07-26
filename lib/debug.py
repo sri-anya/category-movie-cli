@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # lib/debug.py
 
-from models.__init__ import CONN, CURSOR
 import ipdb
 from models.genre import Genre
 from models.movie import Movie
-from lib.movie_helpers import add_new_movie
 
 def reset_database():
+    """
+    Reset the database by dropping and recreating the Genre and Movie tables.
+
+    Creates sample genres and movies to populate the newly created tables.
+    """
     Genre.drop_table()
     Movie.drop_table()
     Genre.create_table()
