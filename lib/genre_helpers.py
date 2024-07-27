@@ -2,6 +2,7 @@
 from models.genre import Genre
 from tabulate import tabulate
 from colorama import Fore, Back, Style
+from models.movie import Movie
 
 all_genres = {}
 
@@ -59,8 +60,7 @@ def genre_movie_handler(genre, movies):
         elif choice =="1":
             return
         elif choice == "2":
-            # add_movie()
-            pass
+            add_movie(genre, movies)
         elif choice == "3":
             # update_movie(movie)
             pass
@@ -69,7 +69,95 @@ def genre_movie_handler(genre, movies):
             pass
         else:
             print(Fore.RED+"Invalid Choice"+Fore.RESET)
-        
+def update_movie(genre, movies):
+    movie_selected = input(Fore.YELLOW+"\tName of the movie you want to update: "+Fore.RESET)
+    if movie_selected == "":
+        print(Fore.RED+"\tName of the movie to update cannot be empty string"+Fore.RED)
+        print()
+        return
+    for movie in movies:
+        if movie_selected != movie.name:
+            print(Fore.RED+f"\tMovie {movie_selected} not found!! Returning to current menu.."+Fore.RESET)
+    if movie := Movie.find_by_name(movie_selected):
+        try:
+            print(Fore.GREEN+"\t\t"+"-"*40+Fore.RESET)
+            name = input(Fore.GREEN+"\t\tEnter the movie's new name: "+Fore.RESET)
+            if name:
+                movie.name = name
+            else:
+                movie.name = movie.name
+                print(Fore.YELLOW+"\t\t"+"No change in movie's name."+ Fore.RESET)
+                print()
+
+            release_year = input(Fore.GREEN+"\t\tEnter the movie's new release_year: "+Fore.RESET)
+            if release_year:
+                movie.release_year = release_year
+            else:
+                movie.release_year = movie.release_year
+                print(Fore.YELLOW+"\t\t"+"No change in movie's release year."+ Fore.RESET)
+                print()
+
+            description = input(Fore.GREEN+"\t\tEnter the movie's new description: "+Fore.RESET)
+            if description:
+                movie.description = description
+            else:
+                movie.description = movie.description
+                print(Fore.YELLOW+"\t\t"+"No change in movie's description."+ Fore.RESET)
+                print()
+            genre_name = input(Fore.GREEN+"\t\tEnter the movie's new genre: "+Fore.RESET)
+
+            if genre_name:
+                genre_id = Genre.find_by_name(genre_name).id
+                movie.genre_id = genre_id
+            else:
+                movie.genre_id = movie.genre_id
+                print(Fore.YELLOW+"\t\t"+"No change in movie's genre."+ Fore.RESET)
+                print()
+            confirmation = input(Fore.RED+"\t\tSure about updating? Y/N: "+Fore.RESET)
+            print(Fore.GREEN+"\t\t"+"-"*40+Fore.RESET)
+            if confirmation == 'Y':
+                movie.update()
+                print()
+                print(Fore.YELLOW+"\t"+f'Success: Information for movie {movie.name} updated.'+ Fore.RESET)
+                print("\t"+"*"*50+"\n")
+                print()
+            else:
+                return
+        except Exception as exc:
+            print(Fore.RED+"\t\tError updating movie."+Fore.RESET)
+            print()
+    else:
+        print(Fore.RED+f"\tMovie {movie_selected} not found!! Returning to current menu.."+Fore.RESET)
+        print()
+
+def add_movie(genre, movies):
+    # print(genre, movies[0].genre_id)
+    # print(all_genres)
+    print(Fore.BLUE+"\tPlease enter below movie details."+Fore.RESET)
+    name = input(Fore.YELLOW+"\tname: "+Fore.RESET)
+    if name=="":
+        print(Fore.RED+"\tSorry name cannot be empty."+Fore.RESET)
+        print()
+        return
+    #check if name already in movie_list
+
+    release_year =input(Fore.YELLOW+"\trelease year: "+Fore.RESET)
+    if release_year == "":
+        print(Fore.RED+"\tRelease year cannot be empty.\n"+Fore.RESET)
+    description =input(Fore.YELLOW+"\tdescription: "+Fore.RESET)
+    genre_id = movies[0].genre_id
+    #check if name already in movie_list
+    for movie in movies:
+        if movie.name == name:
+            print(Fore.RED+"\tMovie with this name already present\n"+Fore.RESET)
+            return
+    try:
+        movie = Movie.create(name=name, release_year=release_year, description=description, genre_id=genre_id)
+        print(Fore.GREEN+f"\t\tnew {genre} movie added successfully"+Fore.RESET)
+        print("\t"+"-"*50+"\n"+f"\t\tName: {movie.name}\n\t\tRelease_Year: {movie.release_year}\n\t\tGenre: {genre}"+"\t"+"-"*50+"\n")
+    except Exception as exc:
+        print(Fore.RED +f"\t\tError creating movie. Error: {exc}"+ Fore.RESET)
+    print("\t"+"*"*50+"\n")
 
 
 def display_all_movies(genre_selected):
@@ -87,10 +175,11 @@ def genre_movie_menu(genre):
     print("\t",end="")
     print(Back.GREEN,"Please select an option: "+Style.RESET_ALL)
     print("\t0. Exit Program")
-    print("\t1. Return to main menu")
-    print(f"\t2. To add a movie for {genre} genre")
-    print(f"\t3. To update a movie from {genre} genre ")
-    print(f"\t4. To delete a movie from {genre} genre ")
+    print("\t1. Return to previous menu")
+    print(f"\t2. To add a new {genre} movie")
+    print(f"\t3. To update an/a {genre} movie ")
+    print(f"\t4. To delete a {genre} movie ")
+    print("\t5. Check another genre movie ")
     print()
 
 def genre_menu(genre):
