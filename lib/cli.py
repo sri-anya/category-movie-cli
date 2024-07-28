@@ -7,6 +7,7 @@ from genre_helpers import  (
     )
     
 from movie_helpers import (
+    display_all_movies,
     exit_program
     )
 
@@ -30,7 +31,14 @@ def main():
         if choice == "0":
             exit_program()
         elif choice == "1":
-            handle_genres()
+            if handle_genres() == -1:
+                break
+            else:
+                continue
+        elif choice =="2":
+            display_all_movies()
+        else:
+            print("Invalid choice!")
         
 def menu():
     """

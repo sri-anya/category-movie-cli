@@ -4,17 +4,19 @@ from models.movie import Movie
 from tabulate import tabulate
 from colorama import Fore, Back, Style
 
-def display_all_movies():
-    """
-    Display all genres stored in the database.
 
-    Retrieves all genres and prints each genre's name with an index.
-    """
-    genres = Movie.get_all()
-    print(Fore.WHITE+ Back.LIGHTCYAN_EX+"\tMovies"+ Style.RESET_ALL)
-    for (idx, genre) in enumerate(genres, start=1):
-        all_genres[genre.name] = genre
-        print(f'\t{idx}. {genre.name}')
+
+def display_all_movies():
+    movie_list = []
+    movies = Movie.get_all()
+        
+    for idx, movie in enumerate(movies, start=1):
+        
+        movie_list.append([idx, movie.name, movie.description])
+        
+    print(Fore.WHITE+ Back.BLUE+"\tAll movies:"+Style.RESET_ALL)
+    print(tabulate(movie_list, headers=["index","Name", "Description"], tablefmt="heavy_grid"))
+    # genre_movie_handler( movies=movies)
     print()
 
 def exit_program():
