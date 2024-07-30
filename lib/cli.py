@@ -7,7 +7,7 @@ from genre_helpers import  (
     )
     
 from movie_helpers import (
-    display_all_movies,
+    movie_main,
     exit_program
     )
 
@@ -36,7 +36,7 @@ def main():
             else:
                 continue
         elif choice =="2":
-            display_all_movies()
+            movie_main()
         else:
             print("Invalid choice!")
         
@@ -52,30 +52,8 @@ def menu():
     print(Back.GREEN,"Please select an option (0/1/2): "+Style.RESET_ALL)
     print("0. Exit the program")
     print("1. Search movies based on Genre")
-    print("2. Search movies based on movie name")
+    print("2. Display all movies")
     print()
-
-
-
-    
-def movie_menu():
-    """
-    Display the movie menu.
-
-    Provides options for the user to return to the main menu, search for movies by name or initial letter,
-    add, delete, or update movies.
-
-    Returns:
-        None
-    """
-    print("\t",end="")
-    print(Back.GREEN,"Please select an option (0/1/2/3/4/5): "+Style.RESET_ALL)
-    print("\t0. To return to main menu")
-    print("\t1. To search using movie name")
-    print("\t2. To search using letters A-Z") 
-    print("\t3. To add a movie")
-    print("\t4. To delete a movie") 
-    print("\t5. To update a movie+\n")
     
     
 if __name__ == "__main__":

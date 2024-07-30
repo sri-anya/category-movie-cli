@@ -4,10 +4,11 @@ from tabulate import tabulate
 from colorama import Fore, Back, Style
 from models.movie import Movie
 
-all_genres = {}
-genre_movies= {}
-CURRENT_GENRE = None
-CURRENT_MOVIES = {}
+
+dict_all_genres = {} # contains {"id": Genre instance}
+CURRENT_GENRE_ID = None # contains {genre id whose details are being showed currently}
+CURRENT_MOVIES = {} #{movie dictionary for current genre}
+genre_names = []
 
 def handle_genres():
     while True:
@@ -19,17 +20,18 @@ def handle_genres():
             return
         elif choice =="2":
             display_all_genres()
-            genre_selected = input(Fore.YELLOW+"\tTo learn more about particular genre type name of genre:"+Fore.RESET)
-            global CURRENT_GENRE 
-            CURRENT_GENRE= genre_selected
-            print(CURRENT_GENRE)
+            #genre_selected = input(Fore.YELLOW+"\tTo learn more about particular genre type name of genre:"+Fore.RESET)
+            genre_id_selected = input(Fore.YELLOW+"\tTo learn more about particular genre, enter index of genre:"+Fore.RESET)
+            global CURRENT_GENRE_ID 
+            # print(dict_all_genres[genre_id_selected])
+            CURRENT_GENRE_ID= genre_id_selected
+            
             if selected_genre_handler() == -1:
                 return
             else:
                 continue
         elif choice == "3":
-            # add_genre()
-            pass
+            add_genre()
         else:
             print(Fore.RED+"\tInvalid choice.\n"+Fore.RESET)
             return
@@ -47,33 +49,38 @@ def display_all_genres():
     genres = Genre.get_all()
     print(Fore.WHITE+ Back.LIGHTCYAN_EX+"\tGenres"+ Style.RESET_ALL)
     for (idx, genre) in enumerate(genres, start=1):
-        all_genres[genre.name] = genre
+        genre_names.append(genre.name)
+        dict_all_genres[str(idx)] = genre
         print(f'\t{idx}. {genre.name}')
     print()
 
 def display_all_movies():
     
     movie_list = []
-    if CURRENT_GENRE in all_genres.keys():
-        movies = all_genres[CURRENT_GENRE].movies()
-        
-        for idx, movie in enumerate(movies, start=1):
-            global CURRENT_MOVIES
-            movie_list.append([idx, movie.name, movie.description])
-            genre_movies[movie.name] = movie
-            CURRENT_MOVIES[str(idx)] = movie
+    if CURRENT_GENRE_ID in dict_all_genres.keys():
+        movies = dict_all_genres[CURRENT_GENRE_ID].movies()
+        if movies:
+       
+            for idx, movie in enumerate(movies, start=1):
+                global CURRENT_MOVIES
+                movie_list.append([idx, movie.name, movie.description])
+                
+                CURRENT_MOVIES[str(idx)] = movie
+                
+                # print(CURRENT_MOVIES)
+            print(Fore.WHITE+ Back.BLUE+f"\t{dict_all_genres[CURRENT_GENRE_ID].name} movies:"+Style.RESET_ALL)
+            print(tabulate(movie_list, headers=["index","Name", "Description"], tablefmt="heavy_grid"))
             
-            print(CURRENT_MOVIES)
-        print(Fore.WHITE+ Back.BLUE+f"\t{CURRENT_GENRE} movies:"+Style.RESET_ALL)
-        print(tabulate(movie_list, headers=["","Name", "Description"], tablefmt="heavy_grid"))
+        else:
+            print(Fore.RED+f"\tNo movies for {dict_all_genres[CURRENT_GENRE_ID].name} genre"+Fore.RED)
         genre_movie_handler( movies=movies)
     print()
 
 def selected_genre_handler():
-    
-    if CURRENT_GENRE in all_genres.keys():
+   
+    if CURRENT_GENRE_ID in dict_all_genres.keys():
         while True:
-            genre_menu(genre=CURRENT_GENRE)
+            genre_menu(genre_id=CURRENT_GENRE_ID)
             choice = input("\t>>")
             if choice == "0":
                 exit_program()
@@ -82,15 +89,15 @@ def selected_genre_handler():
             elif choice == "2":
                 display_all_movies()
             elif choice == "3":
-                print(all_genres[CURRENT_GENRE].description, all_genres[CURRENT_GENRE].created_at)
+                print(Fore.GREEN+"\n\t\tGenre Name: "+dict_all_genres[CURRENT_GENRE_ID].name+"\n"+"\t\tDescription: "+ dict_all_genres[CURRENT_GENRE_ID].description+"\n"+"\t\tCreated At: "+ dict_all_genres[CURRENT_GENRE_ID].created_at+"\n"+Fore.RESET)
     else:
-        print("No such genre exists")
+        print(Fore.RED+"\tNo such genre exists"+Fore.RESET)
         return
 
 def genre_movie_handler( movies):
     while True:
         genre_movie_menu()
-        choice = input("\t>>")
+        choice = input("\t\t>>")
         if choice == "0":
             exit_program()
         elif choice =="1":
@@ -102,25 +109,32 @@ def genre_movie_handler( movies):
         elif choice == "4":
             delete_movie()
         elif choice == "5":
-            print(f"\tEnter the name of genre ({','.join(all_genres.keys())}): ")
-            genre = input(">>")
-            global CURRENT_GENRE
-            CURRENT_GENRE = genre
+            display_all_genres()
+            genre_id = input(f"\n\tEnter the index of genre: ")
+            global CURRENT_GENRE_ID
+            CURRENT_GENRE_ID = genre_id
             break
         else:
-            print(Fore.RED+"Invalid Choice"+Fore.RESET)
+            print(Fore.RED+"\tInvalid Choice"+Fore.RESET)
 
 def update_movie():
+    #display movies again
+    movie_list = []
+    movies = dict_all_genres[CURRENT_GENRE_ID].movies()
+    if movies:
+       
+        for idx, movie in enumerate(movies, start=1):
+            global CURRENT_MOVIES
+            movie_list.append([idx, movie.name, movie.description])
+            CURRENT_MOVIES[str(idx)] = movie
+        print(Fore.WHITE+ Back.BLUE+f"\t{dict_all_genres[CURRENT_GENRE_ID].name} movies:"+Style.RESET_ALL)
+        print(tabulate(movie_list, headers=["","Name", "Description"], tablefmt="heavy_grid"))
+
     movie_id_selected = input(Fore.YELLOW+"\tId of the movie you want to update: "+Fore.RESET)
-    # movie_selected = input(Fore.YELLOW+"\tName of the movie you want to update: "+Fore.RESET)
     if movie_id_selected == "":
         print(Fore.RED+"\tIndex of the movie selected to update cannot be empty string\n"+Fore.RED)
-        
         return
-    # for movie in movies:
-    #     if movie_selected == movie.name:
-    # if movie_selected in genre_movies:
-    #     movie = genre_movies[movie_selected]
+    
     if movie_id_selected in CURRENT_MOVIES:
         movie = CURRENT_MOVIES[movie_id_selected]
         try:
@@ -147,11 +161,10 @@ def update_movie():
                 movie.description = movie.description
                 print(Fore.YELLOW+"\t\t"+"No change in movie's description.\n"+ Fore.RESET)
 
-            genre_name = input(Fore.GREEN+"\t\tEnter the movie's new genre: "+Fore.RESET)
+            genre_id = input(Fore.GREEN+"\t\tEnter the movie's new genre id: "+Fore.RESET)
 
-            if genre_name:
-                genre_id = all_genres[genre_name].id
-                movie.genre_id = genre_id
+            if genre_id:
+                movie.genre_id = int(genre_id)
             else:
                 movie.genre_id = movie.genre_id
                 print(Fore.YELLOW+"\t\t"+"No change in movie's genre.\n"+ Fore.RESET)
@@ -173,23 +186,37 @@ def update_movie():
         print(Fore.RED+f"\tMovie {movie_id_selected} not found!! Returning to current menu..\n"+Fore.RESET)
 
 def delete_movie():
-    movie_id_selected = input(Fore.YELLOW+"\tId of the movie you want to update: "+Fore.RESET)
+    movie_list = []
+    movies = dict_all_genres[CURRENT_GENRE_ID].movies()
+    if movies:
+    
+        for idx, movie in enumerate(movies, start=1):
+            global CURRENT_MOVIES
+            movie_list.append([idx, movie.name, movie.description])
+            
+            CURRENT_MOVIES[str(idx)] = movie
+            
+            # print(CURRENT_MOVIES)
+        print(Fore.WHITE+ Back.BLUE+f"\t{dict_all_genres[CURRENT_GENRE_ID].name} movies:"+Style.RESET_ALL)
+        print(tabulate(movie_list, headers=["","Name", "Description"], tablefmt="heavy_grid"))
+    
+    movie_id_selected = input(Fore.YELLOW+"\tId of the movie you want to delete: "+Fore.RESET)
     # movie_selected = input(Fore.YELLOW+"\tName of the movie you want to update: "+Fore.RESET)
     if movie_id_selected == "":
         print(Fore.RED+"\tIndex of the movie selected to be deleted cannot be empty string\n"+Fore.RED)
         
         return
    
-    if movie_id_selected in CURRENT_MOVIES:
+    if movie_id_selected in CURRENT_MOVIES.keys():
         movie = CURRENT_MOVIES[movie_id_selected]
-        print(movie)
+        
         try:
             movie.delete()
             print(Fore.GREEN+"\tMovie sucessfully deleted!"+Fore.RESET)
         except Exception as exc:
             print(Fore.RED+f"\t\tError deleting movie. Error: {exc}\n"+Fore.RESET)
     else:
-        print(Fore.RED+f"\tMovie {movie} not found! "+Fore.RESET)
+        print(Fore.RED+f"\tMovie not found! "+Fore.RESET)
     print("\t"+"*"*50+"\n")
 
 def add_movie( movies):
@@ -200,28 +227,46 @@ def add_movie( movies):
         print(Fore.RED+"\tSorry name cannot be empty."+Fore.RESET)
         print()
         return
-    #check if name already in movie_list
+    
 
     release_year =input(Fore.YELLOW+"\trelease year: "+Fore.RESET)
     if release_year == "":
         print(Fore.RED+"\tRelease year cannot be empty.\n"+Fore.RESET)
     description =input(Fore.YELLOW+"\tdescription: "+Fore.RESET)
-    genre_id = movies[0].genre_id
+    genre_id = int(CURRENT_GENRE_ID)
+    
     #check if name already in movie_list
     for movie in movies:
         if movie.name == name:
-            print(Fore.RED+"\tMovie with this name already present\n"+Fore.RESET)
+            print(Fore.RED+"\tMovie with this name already present in database\n"+Fore.RESET)
             return
     try:
         movie = Movie.create(name=name, release_year=release_year, description=description, genre_id=genre_id)
-        print(Fore.GREEN+f"\t\tnew {CURRENT_GENRE} movie added successfully"+Fore.RESET)
-        print("\t"+"-"*50+"\n"+f"\t\tName: {movie.name}\n\t\tRelease_Year: {movie.release_year}\n\t\tGenre: {CURRENT_GENRE}\n"+"\t"+"-"*50+"\n")
-        genre_movies[movie.name] = movie
+        print(Fore.GREEN+f"\t\tnew {dict_all_genres[CURRENT_GENRE_ID].name} movie added successfully"+Fore.RESET)
+        print("\t"+"-"*50+"\n"+f"\t\tName: {movie.name}\n\t\tRelease_Year: {movie.release_year}\n\t\tGenre: {dict_all_genres[CURRENT_GENRE_ID].name}\n"+"\t"+"-"*50+"\n")
+        
     except Exception as exc:
         print(Fore.RED +f"\t\tError creating movie. Error: {exc}"+ Fore.RESET)
     print("\t"+"*"*50+"\n")
 
+def add_genre():
+    genres = Genre.get_all()
+    for genre in (genres):
+        genre_names.append(genre.name)
+    name = input(Fore.YELLOW+"\tEnter the genre's name: "+ Fore.RESET)
+    if name in genre_names:
+        print(Fore.RED + f"\tGenre {name} already exists.."+Fore.RESET)
+        print()
+        return
+    description = input(Fore.YELLOW+"\tEnter the genre's description: "+ Fore.RESET)
+    creation_date = input(Fore.YELLOW+"\tEnter the genre's creation date: "+ Fore.RESET)
 
+    try:
+        genre = Genre.create(name, description, creation_date)
+        print(Fore.GREEN+ f'\tSuccess: Genre {genre.name} is created'+ Fore.RESET)
+        return genre
+    except Exception as exc:
+        print(Fore.RED + f"\tError creating genre: {exc}"+Fore.RESET)
 
 
 def genre_movie_menu():
@@ -229,19 +274,19 @@ def genre_movie_menu():
     print(Back.GREEN,"Please select an option: "+Style.RESET_ALL)
     print("\t\t0. Exit Program")
     print("\t\t1. Return to previous menu")
-    print(f"\t\t2. To add a new {CURRENT_GENRE} movie")
-    print(f"\t\t3. To update an/a {CURRENT_GENRE} movie ")
-    print(f"\t\t4. To delete a {CURRENT_GENRE} movie ")
-    print("\t\t5. Check another genre movie ")
+    print(f"\t\t2. To add a new {dict_all_genres[CURRENT_GENRE_ID].name} movie")
+    print(f"\t\t3. To update an/a {dict_all_genres[CURRENT_GENRE_ID].name} movie ")
+    print(f"\t\t4. To delete a {dict_all_genres[CURRENT_GENRE_ID].name} movie ")
+    print("\t\t5. Check another genre ")
     print()
 
-def genre_menu(genre):
+def genre_menu(genre_id):
     print("\t",end="")
     print(Back.GREEN,"Please select an option: "+Style.RESET_ALL)
     print("\t0. Exit Program")
     print("\t1. Return to main menu")
-    print(f"\t2. To view all movies for {genre} genre")
-    print(f"\t3. To learn more about {genre} genre ")
+    print(f"\t2. To view all movies for {dict_all_genres[genre_id].name} genre")
+    print(f"\t3. To learn more about {dict_all_genres[genre_id].name} genre ")
     print()
 
 def menu():
