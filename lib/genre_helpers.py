@@ -13,17 +13,16 @@ genre_names = []
 def handle_genres():
     while True:
         menu()
-        choice = input(">>")
+        choice = input("\t>>")
         if choice == "0":
             exit_program()
         elif choice =="1":
             return
         elif choice =="2":
             display_all_genres()
-            #genre_selected = input(Fore.YELLOW+"\tTo learn more about particular genre type name of genre:"+Fore.RESET)
-            genre_id_selected = input(Fore.YELLOW+"\tTo learn more about particular genre, enter index of genre:"+Fore.RESET)
+            genre_id_selected = input(Fore.YELLOW+"\t\tTo learn more about particular genre, enter index of genre: "+Fore.RESET)
+            print()
             global CURRENT_GENRE_ID 
-            # print(dict_all_genres[genre_id_selected])
             CURRENT_GENRE_ID= genre_id_selected
             
             if selected_genre_handler() == -1:
@@ -35,10 +34,7 @@ def handle_genres():
         else:
             print(Fore.RED+"\tInvalid choice.\n"+Fore.RESET)
             return
-            
-
-
-            
+                  
 
 def display_all_genres():
     """
@@ -47,12 +43,13 @@ def display_all_genres():
     Retrieves all genres and prints each genre's name with an index.
     """
     genres = Genre.get_all()
-    print(Fore.WHITE+ Back.LIGHTCYAN_EX+"\tGenres"+ Style.RESET_ALL)
+    print(Fore.WHITE+ Back.LIGHTCYAN_EX+"\t\tGenres"+ Style.RESET_ALL)
     for (idx, genre) in enumerate(genres, start=1):
         genre_names.append(genre.name)
         dict_all_genres[str(idx)] = genre
-        print(f'\t{idx}. {genre.name}')
+        print(f'\t\t{idx}. {genre.name}')
     print()
+
 
 def display_all_movies():
     
@@ -60,21 +57,19 @@ def display_all_movies():
     if CURRENT_GENRE_ID in dict_all_genres.keys():
         movies = dict_all_genres[CURRENT_GENRE_ID].movies()
         if movies:
-       
             for idx, movie in enumerate(movies, start=1):
                 global CURRENT_MOVIES
                 movie_list.append([idx, movie.name, movie.description])
-                
                 CURRENT_MOVIES[str(idx)] = movie
-                
-                # print(CURRENT_MOVIES)
             print(Fore.WHITE+ Back.BLUE+f"\t{dict_all_genres[CURRENT_GENRE_ID].name} movies:"+Style.RESET_ALL)
             print(tabulate(movie_list, headers=["index","Name", "Description"], tablefmt="heavy_grid"))
+            print()
             
         else:
             print(Fore.RED+f"\tNo movies for {dict_all_genres[CURRENT_GENRE_ID].name} genre"+Fore.RED)
         genre_movie_handler( movies=movies)
     print()
+
 
 def selected_genre_handler():
    
@@ -93,6 +88,7 @@ def selected_genre_handler():
     else:
         print(Fore.RED+"\tNo such genre exists"+Fore.RESET)
         return
+    
 
 def genre_movie_handler( movies):
     while True:
@@ -125,10 +121,10 @@ def update_movie():
        
         for idx, movie in enumerate(movies, start=1):
             global CURRENT_MOVIES
-            movie_list.append([idx, movie.name, movie.description])
+            movie_list.append([idx, movie.name, movie.release_year, movie.description])
             CURRENT_MOVIES[str(idx)] = movie
         print(Fore.WHITE+ Back.BLUE+f"\t{dict_all_genres[CURRENT_GENRE_ID].name} movies:"+Style.RESET_ALL)
-        print(tabulate(movie_list, headers=["","Name", "Description"], tablefmt="heavy_grid"))
+        print(tabulate(movie_list, headers=["","Name", "Release Year", "Description"], tablefmt="heavy_grid"))
 
     movie_id_selected = input(Fore.YELLOW+"\tId of the movie you want to update: "+Fore.RESET)
     if movie_id_selected == "":
@@ -160,8 +156,9 @@ def update_movie():
             else:
                 movie.description = movie.description
                 print(Fore.YELLOW+"\t\t"+"No change in movie's description.\n"+ Fore.RESET)
-
-            genre_id = input(Fore.GREEN+"\t\tEnter the movie's new genre id: "+Fore.RESET)
+            
+            display_all_genres()
+            genre_id = input(Fore.GREEN+"\t\tSelect the movie's new genre index: "+Fore.RESET)
 
             if genre_id:
                 movie.genre_id = int(genre_id)
@@ -259,11 +256,11 @@ def add_genre():
         print()
         return
     description = input(Fore.YELLOW+"\tEnter the genre's description: "+ Fore.RESET)
-    creation_date = input(Fore.YELLOW+"\tEnter the genre's creation date: "+ Fore.RESET)
+    creation_date = input(Fore.YELLOW+"\tEnter the genre's creation date (YYYY-MM-DD): "+ Fore.RESET)
 
     try:
         genre = Genre.create(name, description, creation_date)
-        print(Fore.GREEN+ f'\tSuccess: Genre {genre.name} is created'+ Fore.RESET)
+        print(Fore.GREEN+ f'\n\tSuccess: Genre {genre.name} is created\n'+ Fore.RESET)
         return genre
     except Exception as exc:
         print(Fore.RED + f"\tError creating genre: {exc}"+Fore.RESET)
