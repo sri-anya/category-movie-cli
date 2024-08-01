@@ -11,29 +11,12 @@ CURRENT_MOVIES = {} #{movie dictionary for current genre}
 genre_names = []
 
 def handle_genres():
-    while True:
-        menu()
-        choice = input("\t>>")
-        if choice == "0":
-            exit_program()
-        elif choice =="1":
-            return
-        elif choice =="2":
-            display_all_genres()
-            genre_id_selected = input(Fore.YELLOW+"\t\tTo learn more about particular genre, enter index of genre: "+Fore.RESET)
-            print()
-            global CURRENT_GENRE_ID 
-            CURRENT_GENRE_ID= genre_id_selected
-            
-            if selected_genre_handler() == -1:
-                return
-            else:
-                continue
-        elif choice == "3":
-            add_genre()
-        else:
-            print(Fore.RED+"\tInvalid choice.\n"+Fore.RESET)
-            return
+    display_all_genres()
+    genre_id_selected = input(Fore.YELLOW+"\t\tTo learn more about particular genre, enter index of genre: "+Fore.RESET)
+    print()
+    global CURRENT_GENRE_ID 
+    CURRENT_GENRE_ID= genre_id_selected
+    selected_genre_handler()
                   
 def display_all_genres():
     """
@@ -83,7 +66,7 @@ def selected_genre_handler():
             elif choice == "3":
                 print(Fore.GREEN+"\n\t\tGenre Name: "+dict_all_genres[CURRENT_GENRE_ID].name+"\n"+"\t\tDescription: "+ dict_all_genres[CURRENT_GENRE_ID].description+"\n"+"\t\tCreated At: "+ dict_all_genres[CURRENT_GENRE_ID].created_at+"\n"+Fore.RESET)
     else:
-        print(Fore.RED+"\tNo such genre exists"+Fore.RESET)
+        print(Fore.RED+"\t\tNo such genre exists"+Fore.RESET)
         return
     
 def genre_movie_handler( movies):
@@ -122,7 +105,7 @@ def update_movie():
         print(Fore.WHITE+ Back.BLUE+f"\t{dict_all_genres[CURRENT_GENRE_ID].name} movies:"+Style.RESET_ALL)
         print(tabulate(movie_list, headers=["","Name", "Release Year", "Description"], tablefmt="heavy_grid"))
 
-    movie_id_selected = input(Fore.YELLOW+"\tId of the movie you want to update: "+Fore.RESET)
+    movie_id_selected = input(Fore.YELLOW+"\tIndex of the movie you want to update: "+Fore.RESET)
     if movie_id_selected == "":
         print(Fore.RED+"\tIndex of the movie selected to update cannot be empty string\n"+Fore.RED)
         return
@@ -176,25 +159,27 @@ def update_movie():
             print(Fore.RED+f"\t\tError updating movie. Error: {exc}\n"+Fore.RESET)
         print()
     else:
-        print(Fore.RED+f"\tMovie {movie_id_selected} not found!! Returning to current menu..\n"+Fore.RESET)
+        print(Fore.RED+f"\tMovie with index {movie_id_selected} not found!! Returning to current menu..\n"+Fore.RESET)
 
 def delete_movie():
+    global CURRENT_MOVIES
+    
     movie_list = []
     movies = dict_all_genres[CURRENT_GENRE_ID].movies()
+    
     if movies:
     
         for idx, movie in enumerate(movies, start=1):
-            global CURRENT_MOVIES
+            
             movie_list.append([idx, movie.name, movie.description])
             
             CURRENT_MOVIES[str(idx)] = movie
-            
-            # print(CURRENT_MOVIES)
+
         print(Fore.WHITE+ Back.BLUE+f"\t{dict_all_genres[CURRENT_GENRE_ID].name} movies:"+Style.RESET_ALL)
         print(tabulate(movie_list, headers=["","Name", "Description"], tablefmt="heavy_grid"))
     
-    movie_id_selected = input(Fore.YELLOW+"\tId of the movie you want to delete: "+Fore.RESET)
-    # movie_selected = input(Fore.YELLOW+"\tName of the movie you want to update: "+Fore.RESET)
+    movie_id_selected = input(Fore.YELLOW+"\tIndex of the movie you want to delete: "+Fore.RESET)
+    
     if movie_id_selected == "":
         print(Fore.RED+"\tIndex of the movie selected to be deleted cannot be empty string\n"+Fore.RED)
         
@@ -281,23 +266,28 @@ def genre_menu(genre_id):
     print(f"\t3. To learn more about {dict_all_genres[genre_id].name} genre ")
     print()
 
-def menu():
-    """
-    Display the genre menu.
+def delete_genre():
+    display_all_genres()
+    genre_id_selected = input(Fore.YELLOW+"\tIndex of the genre you want to delete: "+Fore.RESET)
 
-    Provides options for the user to return to the main menu, search for genres, delete, update, or create genres.
-
-    Returns:
-        None
-    """
-    print("\t",end="")
-    print(Back.GREEN,"Please select an option: "+Style.RESET_ALL)
-    print("\t0. Exit Program")
-    print("\t1. Return to main menu")
-    print("\t2. Display all genres")
-    print("\t3. Add a genre")
-    print()
-
+    if genre_id_selected == "":
+        print(Fore.RED+"\tIndex of the movie selected to be deleted cannot be empty string\n"+Fore.RED)
+        
+        return
+   
+    if genre_id_selected in dict_all_genres.keys():
+        genre = dict_all_genres[genre_id_selected]
+        
+        try:
+            genre.delete()
+            genre_names.remove(genre.name)
+            print(Fore.GREEN+"\tGenre sucessfully deleted!"+Fore.RESET)
+        except Exception as exc:
+            print(Fore.RED+f"\t\tError deleting genre. Error: {exc}\n"+Fore.RESET)
+    else:
+        print(Fore.RED+f"\tGenre not found! "+Fore.RESET)
+    print("\t"+"*"*50+"\n")
+    
 def exit_program():
     """
     Exit the program.

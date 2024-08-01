@@ -252,26 +252,6 @@ class Genre:
         return Genre.instance_from_db(row)
     
     
-    # @classmethod
-    # def find_by_name(cls, name):
-    #     """
-    #     Return a Genre object corresponding to the first table row matching the specified name.
-
-    #     Parameters:
-    #         name (str): The name of the genre to find.
-
-    #     Returns:
-    #         Genre: The corresponding Genre instance, or None if not found.
-    #     """
-    #     sql = """
-    #         SELECT *
-    #         FROM genres
-    #         WHERE name is ?
-    #     """
-
-    #     row = CURSOR.execute(sql, (name,)).fetchone()
-    #     return cls.instance_from_db(row) if row else None
-    
     def movies(self):
         """
         Return a list of Movie instances that belong to the current Genre instance.

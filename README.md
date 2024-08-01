@@ -27,7 +27,7 @@ CATEGORY-MOVIE-CLI/
     
 #### `cli.py`
 
-This is the main script to run the CLI application. It provides a user interface for interacting with the system, allowing users to manage genres, search movies, and exit the program.
+This is the main script to run the CLI application. It provides a user interface for interacting with the system, allowing users to manage genres, search movies, add and delete genre and exit the program.
 
 - **main()**: Displays the main menu and handles user input for navigating the application. Users can select options to manage genres, movies, or exit the program.
 - **menu()**: Displays the main menu options for the user.
@@ -76,11 +76,11 @@ This script provides various helper functions for managing genres and their asso
 - **genre_movie_handler(movies)**: Handles movie-related operations within a genre.
 - **update_movie()**: Updates the details of a selected movie.
 - **delete_movie()**: Deletes a selected movie from the database.
+- **delete_genre()**: Deletes a selected genre from the database.
 - **add_movie(movies)**: Adds a new movie to the currently selected genre.
 - **add_genre()**: Adds a new genre to the database.
 - **genre_movie_menu()**: Displays a menu for movie-related operations within a genre.
 - **genre_menu(genre_id)**: Displays a menu for genre-related operations.
-- **menu()**: Displays the main menu for genre operations.
 - **exit_program()**: Exits the program with a goodbye message.
 
 #### `movie_helpers.py`

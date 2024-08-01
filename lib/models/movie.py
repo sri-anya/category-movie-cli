@@ -251,30 +251,6 @@ class Movie:
 
         row = CURSOR.execute(sql, (id_,)).fetchone()
         return Movie.instance_from_db(row)
-
-    
-    
-    
-    # @classmethod
-    # def find_by_name(cls, name):
-    #     """
-    #     Return a Movie object corresponding to the first table row matching the specified name.
-        
-    #     Parameters:
-    #         name (str): The name of the movie to find.
-        
-    #     Returns:
-    #         Movie: The corresponding Movie instance, or None if not found.
-    #     """
-        
-    #     sql = """
-    #         SELECT *
-    #         FROM movies
-    #         WHERE name = ?
-    #     """
-
-    #     row = CURSOR.execute(sql, (name,)).fetchone()
-    #     return cls.instance_from_db(row) if row else None
     
     def delete(self):
         """

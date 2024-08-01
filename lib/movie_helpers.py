@@ -45,9 +45,9 @@ def add_movie():
     if genre_id in dict_all_genres.keys():
         genre_name = dict_all_genres[genre_id].name
     else:
-        genre = add_genre()
-        genre_name = genre.name
-        genre_id = genre.id
+        print(Fore.RED +"\tPlease select genre from above list only. Returning to menu.."+Fore.RESET)
+        return
+    
         
     #check if name already in movie_list
     for movie_name in movie_name_dict.keys():
@@ -66,8 +66,8 @@ def add_movie():
 
 def delete_movie():
     
-    movie_id_selected = input(Fore.YELLOW+"\tId of the movie you want to delete: "+Fore.RESET)
-    # movie_selected = input(Fore.YELLOW+"\tName of the movie you want to update: "+Fore.RESET)
+    movie_id_selected = input(Fore.YELLOW+"\tIndex of the movie you want to delete: "+Fore.RESET)
+   
     if movie_id_selected == "":
         print(Fore.RED+"\tIndex of the movie selected to be deleted cannot be empty string\n"+Fore.RED)
         
@@ -86,8 +86,7 @@ def delete_movie():
     print("\t"+"*"*50+"\n")
 
 def update_movie():
-    movie_id_selected = input(Fore.YELLOW+"\tId of the movie you want to update: "+Fore.RESET)
-    # movie_selected = input(Fore.YELLOW+"\tName of the movie you want to update: "+Fore.RESET)
+    movie_id_selected = input(Fore.YELLOW+"\tIndex of the movie you want to update: "+Fore.RESET)
     if movie_id_selected == "":
         print(Fore.RED+"\tIndex of the movie selected to be updated cannot be empty string\n"+Fore.RED)
         
@@ -125,17 +124,15 @@ def update_movie():
             print(Fore.YELLOW+"\tSelect Genre index from below list: "+Fore.RESET)
             display_all_genres()
             genre_id = input("\t>>")
-            # genre = (dict_all_genres[genre_id].name)
-            # genre_name = input(Fore.GREEN+"\t\tEnter the movie's new genre: "+Fore.RESET)
+            
             
             if genre_id:
                 if genre_id in dict_all_genres.keys():
-                    genre_name = dict_all_genres[genre_id].name
+                    
                     movie.genre_id = int(genre_id)
                 else:
-                    genre = add_genre()
-                    genre_name = genre.name
-                    movie.genre_id  = genre.id
+                    print("Genre index incorrect!")
+               
                 
                 
             else:
@@ -156,7 +153,7 @@ def update_movie():
             print(Fore.RED+f"\t\tError updating movie. Error: {exc}"+Fore.RESET)
             print()
     else:
-        print(Fore.RED+f"\tMovie with id {movie_id_selected} not found!! Returning to current menu.."+Fore.RESET)
+        print(Fore.RED+f"\tMovie with index {movie_id_selected} not found!! Returning to current menu.."+Fore.RESET)
         print()
 
 def find_all_by_movie_name():
