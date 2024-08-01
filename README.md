@@ -2,10 +2,29 @@
 
 ## Project Overview
 
+![Python](https://img.shields.io/badge/Python-3.8-blue)
+![SQLite](https://img.shields.io/badge/SQLite-3.34.0-lightgrey)
+![Faker](https://img.shields.io/badge/Faker-8.1.0-green)
+![Tabulate](https://img.shields.io/badge/Tabulate-0.8.9-yellow)
+![Colorama](https://img.shields.io/badge/Colorama-0.4.4-red)
+
+
 This CLI application allows users to manage movies and genres. Users can add, update, delete, and view movies and genres through a simple command-line interface. Below is a detailed description of the project's structure and functionality.
 
-### Files and Structure
+## File Structure
+CATEGORY-MOVIE-CLI/  
+&nbsp;&nbsp;├── lib/  
+&nbsp;&nbsp;&nbsp;&nbsp;├── models/  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── __init__.py  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── movie.py  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── genre.py  
+&nbsp;&nbsp;&nbsp;&nbsp;├── cli.py  
+&nbsp;&nbsp;&nbsp;&nbsp;├── genre_helpers.py  
+&nbsp;&nbsp;&nbsp;&nbsp;├── movie_helpers.py  
+&nbsp;&nbsp;&nbsp;&nbsp;├── seed.py  
 
+
+    
 #### `cli.py`
 
 This is the main script to run the CLI application. It provides a user interface for interacting with the system, allowing users to manage genres, search movies, and exit the program.
@@ -26,10 +45,6 @@ This file defines the `Movie` class and includes methods for interacting with mo
   - **create()**: Creates and saves a new `Movie` instance.
   - **instance_from_db()**: Creates a `Movie` instance from a database row.
   - **get_all()**: Retrieves all movies from the database.
-  - **find_by_id()**: Finds a `Movie` by its ID.
-  - **find_all_by_name()**: Finds all movies with a given name.
-  - **find_all_by_first_char()**: Finds all movies starting with a given character.
-  - **find_by_name()**: Finds a `Movie` by its name.
   - **delete()**: Deletes a `Movie` from the database.
   - **update()**: Updates a `Movie` in the database.
 
@@ -46,12 +61,9 @@ This file defines the `Genre` class and includes methods for interacting with ge
   - **create()**: Creates and saves a new `Genre` instance.
   - **instance_from_db()**: Creates a `Genre` instance from a database row.
   - **get_all()**: Retrieves all genres from the database.
-  - **find_by_id()**: Finds a `Genre` by its ID.
-  - **find_by_name()**: Finds a `Genre` by its name.
   - **movies()**: Retrieves all movies associated with the genre.
   - **delete()**: Deletes a `Genre` from the database.
   - **update()**: Updates a `Genre` in the database.
-  - **movies_from_db()**: Retrieves all movies from the database associated with the genre.
 
 #### `genre_helpers.py`
 
@@ -84,9 +96,21 @@ This script provides various helper functions for managing movies and their asso
 - **menu()**: Displays the main menu for movie operations.
 - **exit_program()**: Exits the program with a goodbye message.
 
+#### `__init__.py`
+
+Initializes the SQLite database connection.
+
+- Establishes connection to the SQLite database and sets up the cursor for executing SQL commands.
+
+#### `seed.py`
+
+Seeds the database with initial data using the Faker library.
+
+- Populates the database with predefined genres and randomly generated movies for testing and demonstration purposes.
+
 ### Screenshots and Resources
 
-![Main Menu](MovieDB_CLI.png)
+![Main Menu](MOVIE_CLI.png)
 
 - [Pyfiglet Documentation](https://github.com/pwaller/pyfiglet)
 - [Colorama Documentation](https://pypi.org/project/colorama/)
@@ -98,5 +122,6 @@ This script provides various helper functions for managing movies and their asso
 2. Install the required packages using `pipenv install`.
 3. Create Python Shell `pipenv shell`
 3. Run the application using `python /lib/cli.py`.
+
 
 

@@ -35,7 +35,6 @@ def handle_genres():
             print(Fore.RED+"\tInvalid choice.\n"+Fore.RESET)
             return
                   
-
 def display_all_genres():
     """
     Display all genres stored in the database.
@@ -49,7 +48,6 @@ def display_all_genres():
         dict_all_genres[str(idx)] = genre
         print(f'\t\t{idx}. {genre.name}')
     print()
-
 
 def display_all_movies():
     
@@ -70,7 +68,6 @@ def display_all_movies():
         genre_movie_handler( movies=movies)
     print()
 
-
 def selected_genre_handler():
    
     if CURRENT_GENRE_ID in dict_all_genres.keys():
@@ -89,7 +86,6 @@ def selected_genre_handler():
         print(Fore.RED+"\tNo such genre exists"+Fore.RESET)
         return
     
-
 def genre_movie_handler( movies):
     while True:
         genre_movie_menu()
@@ -264,7 +260,6 @@ def add_genre():
         return genre
     except Exception as exc:
         print(Fore.RED + f"\tError creating genre: {exc}"+Fore.RESET)
-
 
 def genre_movie_menu():
     print("\t\t",end="")

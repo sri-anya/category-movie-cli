@@ -252,69 +252,29 @@ class Movie:
         row = CURSOR.execute(sql, (id_,)).fetchone()
         return Movie.instance_from_db(row)
 
-
-    @classmethod
-    def find_all_by_name(cls, movie_name):
-        """
-        Find all movies with names matching the specified name.
-        
-        Parameters:
-            movie_name (str): The name to search for.
-        
-        Returns:
-            list: A list of tuples, each containing the values of a matching row from the movies table.
-        """
-        sql = """
-            SELECT * 
-            FROM movies
-            WHERE name LIKE ?
-        """
-
-        rows = CURSOR.execute(sql,('%'+ movie_name + '%',)).fetchall()
-
-        return rows
     
-    @classmethod
-    def find_all_by_first_char(cls, character):
-        """
-        Find all movies with names starting with the specified character.
-        
-        Parameters:
-            character (str): The character to search for.
-        
-        Returns:
-            list: A list of tuples, each containing the values of a matching row from the movies table.
-        """
-        sql = """
-            SELECT * 
-            FROM movies
-            WHERE name LIKE ?
-        """
-
-        rows = CURSOR.execute(sql,(character + '%',)).fetchall()
-
-        return rows
     
-    @classmethod
-    def find_by_name(cls, name):
-        """
-        Return a Movie object corresponding to the first table row matching the specified name.
+    
+    # @classmethod
+    # def find_by_name(cls, name):
+    #     """
+    #     Return a Movie object corresponding to the first table row matching the specified name.
         
-        Parameters:
-            name (str): The name of the movie to find.
+    #     Parameters:
+    #         name (str): The name of the movie to find.
         
-        Returns:
-            Movie: The corresponding Movie instance, or None if not found.
-        """
+    #     Returns:
+    #         Movie: The corresponding Movie instance, or None if not found.
+    #     """
         
-        sql = """
-            SELECT *
-            FROM movies
-            WHERE name = ?
-        """
+    #     sql = """
+    #         SELECT *
+    #         FROM movies
+    #         WHERE name = ?
+    #     """
 
-        row = CURSOR.execute(sql, (name,)).fetchone()
-        return cls.instance_from_db(row) if row else None
+    #     row = CURSOR.execute(sql, (name,)).fetchone()
+    #     return cls.instance_from_db(row) if row else None
     
     def delete(self):
         """

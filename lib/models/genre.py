@@ -126,7 +126,6 @@ class Genre:
                 "Incorrect data format, should be YYYY-MM-DD"
             )
     
-    
     @classmethod
     def create_table(cls):
         """
@@ -189,7 +188,6 @@ class Genre:
         genre.save()
         return genre
     
-
     @classmethod
     def instance_from_db(cls, row):
         """
@@ -254,25 +252,25 @@ class Genre:
         return Genre.instance_from_db(row)
     
     
-    @classmethod
-    def find_by_name(cls, name):
-        """
-        Return a Genre object corresponding to the first table row matching the specified name.
+    # @classmethod
+    # def find_by_name(cls, name):
+    #     """
+    #     Return a Genre object corresponding to the first table row matching the specified name.
 
-        Parameters:
-            name (str): The name of the genre to find.
+    #     Parameters:
+    #         name (str): The name of the genre to find.
 
-        Returns:
-            Genre: The corresponding Genre instance, or None if not found.
-        """
-        sql = """
-            SELECT *
-            FROM genres
-            WHERE name is ?
-        """
+    #     Returns:
+    #         Genre: The corresponding Genre instance, or None if not found.
+    #     """
+    #     sql = """
+    #         SELECT *
+    #         FROM genres
+    #         WHERE name is ?
+    #     """
 
-        row = CURSOR.execute(sql, (name,)).fetchone()
-        return cls.instance_from_db(row) if row else None
+    #     row = CURSOR.execute(sql, (name,)).fetchone()
+    #     return cls.instance_from_db(row) if row else None
     
     def movies(self):
         """
@@ -323,18 +321,4 @@ class Genre:
         CURSOR.execute(sql, (self.name, self.description, self.created_at, self.id))
         CONN.commit()
 
-    def movies_from_db(self):
-        """
-        Return a list of rows from the movies table that belong to the current Genre instance.
-
-        Returns:
-            list: A list of tuples, each containing the values of a row from the movies table.
-        """
-        sql = """
-            select * 
-            from movies
-            where genre_id = ?
-        """
-
-        rows = CURSOR.execute(sql, (self.id,)).fetchall()
-        return rows
+   
